@@ -1,0 +1,319 @@
+﻿@inject ICourseState CourseState
+@inject IAdvancedSearchState AdvancedSearchState
+@inject IToastService toastService
+
+<div class="card" style="width: 350px;">
+    <!--<div class="card-header text-center bg-light">
+        <strong>Tip: </strong> You can click on a unsatisfied course to add to your schedule or apply a custom search criteria
+    </div>-->
+
+    <ul class="nav nav-pills" id="pills-tab" role="tablist" style="justify-content: center; background-color: #f8f9fa; padding-top: 15px;">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="pills-required-tab" data-bs-toggle="pill" data-bs-target="#pills-required" type="button" role="tab" aria-controls="pills-required" aria-selected="true">Required</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="pills-recommended-tab" data-bs-toggle="pill" data-bs-target="#pills-recommended" type="button" role="tab" aria-controls="pills-recommended" aria-selected="false">Recommended</button>
+        </li>
+    </ul>
+    <div class="tab-content" id="pills-tabContent">
+
+        <!-- Tab contents for required courses -->
+        <div class="tab-pane fade show active" id="pills-required" role="tabpanel" aria-labelledby="pills-required-tab">
+            <div class="card-header text-center">
+                <h4><strong>Degree Requirements: <br>
+                BSc Major Program</strong></h4>
+            </div>
+
+            <!-- Used to maintain a list of selected courses that can be searched though with .Contains-->
+            @if(true){
+                selectedCoursesNumber = new List<string>();
+                @if (CourseState.selectedCourses != null)
+                {
+                    @foreach (var courseItem in CourseState.selectedCourses)
+                    {
+                        selectedCoursesNumber.Add(courseItem.Number);
+                    }
+                }
+            }
+
+            <!-- Color pallet for background (based on the blue used when a drop down is opened)
+            https://convertingcolors.com/color-palette-image/view/E7F1FFFFEBF2F8EFE1E0F5EE.png -->
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item" style="background-color: #FFEBF2;">
+                    <strong>Unsatisfied</strong>
+                </li>
+                <li class="list-group-item">
+                    @if(!selectedCoursesNumber.Contains("CPSC 449")){
+                        string toAddReq = "CPSC 449";
+                        <div><b>3 Units</b> - <a href="" @onclick="() => CourseState.AddCourse(CourseList.GetCourse(toAddReq))" @onclick:preventDefault>CPSC 449</a></div>
+                    }
+                    @if(!selectedCoursesNumber.Contains("CPSC 399")){
+                        <div><b>3 Units</b> - Course from the <a href="" @onclick="() => AdvancedSearchInFieldOfComputerScienceGreaterThan(299)" @onclick:preventDefault>Field of Computer Science at the 300 level or above</a></div>
+                    }
+                    @if(!selectedCoursesNumber.Contains("CPSC 481")){
+                        <div><b>3 Units</b> - Course from the <a href="" @onclick="() => AdvancedSearchInFieldOfComputerScienceGreaterThan(399)" @onclick:preventDefault>Field of Computer Science at the 400 level or above</a></div>
+                    }
+
+                    @{int optionsRemaining = 0;}
+                    @if(!selectedCoursesNumber.Contains("ASPH 305")){
+                        optionsRemaining++;
+                    }
+                    @if(!selectedCoursesNumber.Contains("GEOG 280")){
+                        optionsRemaining++;
+                    }
+                    @if(!selectedCoursesNumber.Contains("ASTR 209")){
+                        optionsRemaining++;
+                    }
+                    @if(optionsRemaining == 1){
+                        <div><b>3 Units</b> - <a href="" @onclick="() => AdvancedSearchNotInFieldOfComputerScience()" @onclick:preventDefault>Non-Major Field Option</a></div>
+                    }
+                    @if(optionsRemaining == 2){
+                        <div><b>6 Units</b> - <a href="" @onclick="() => AdvancedSearchNotInFieldOfComputerScience()" @onclick:preventDefault>Non-Major Field Option</a></div>
+                    }
+                    @if(optionsRemaining == 3){
+                        <div><b>9 Units</b> - <a href="" @onclick="() => AdvancedSearchNotInFieldOfComputerScience()" @onclick:preventDefault>Non-Major Field Option</a></div>
+                    }
+                </li>
+                <li class="list-group-item" style="background-color: #F8EFE1;">
+                    <strong>Selected/In Progress</strong>
+                </li>
+                <li class="list-group-item">
+                    @if(selectedCoursesNumber.Contains("CPSC 449")){
+                        <div><b>3 Units</b> - CPSC 449</div>
+                    }
+                    @if(selectedCoursesNumber.Contains("CPSC 399")){
+                        <div><b>3 Units</b> - From the Field of Computer Science at the 300 level or above</div>
+                    }
+                    @if(selectedCoursesNumber.Contains("CPSC 481")){
+                        <div><b>3 Units</b> - From the Field of Computer Science at the 400 level or above</div>
+                    }
+
+                    @{int optionsHave = 0;}
+                    @if(selectedCoursesNumber.Contains("ASPH 305")){
+                        optionsHave++;
+                    }
+                    @if(selectedCoursesNumber.Contains("GEOG 280")){
+                        optionsHave++;
+                    }
+                    @if(selectedCoursesNumber.Contains("ASTR 209")){
+                        optionsHave++;
+                    }
+                    @if(optionsHave == 1){
+                        <div><b>3 Units</b> - Non-Major Field Option</div>
+                    }
+                    @if(optionsHave == 2){
+                        <div><b>6 Units</b> - Non-Major Field Option</div>
+                    }
+                    @if(optionsHave == 3){
+                        <div><b>9 Units</b> - Non-Major Field Option</div>
+                    }
+                </li>
+                <li class="list-group-item" style="background-color: #E0F5EE;">
+                    <strong>Satisfied</strong>
+                </li>
+                <li class="list-group-item">
+                    <div><b>3 Units</b> - SENG 300</div>
+                </li>
+                <li class="list-group-item" style="background-color: #E7F1FF;">
+                    <strong>Additional Information</strong>
+                </li>
+                <li class="list-group-item">
+                    <div> <strong>Tip: </strong> You can click on a unsatisfied course to add to your schedule or apply a custom search criteria</div>
+                    <div> <strong>Requirement: </strong> The program must contain at least 120 units with a maximum of 48 units at the Junior Level (200 level courses) </div>
+                    <div> <strong>Non-Major Field Option: </strong> Any option NOT in in the field of Computer Science</div>
+                    <div> <strong>Non-Science Option: </strong> Any course from faculties other than the Faculty of Science, excluding courses in <a href = "https://www.ucalgary.ca/pubs/calendar/current/sc-3-4.html#2587" target="_blank" rel="noopener noreferrer">this table </a></div>
+                    <div> <strong>Open Option: </strong> Any course offered by any Faculty</div>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Tab contents for reccomened courses -->
+        <div class="tab-pane fade" id="pills-recommended" role="tabpanel" aria-labelledby="pills-recommended-tab">
+            <div class="card-header text-center">
+                <h4><strong>Recommended Courses: <br>
+                BSc Major Program</strong></h4>
+            </div>
+
+            <!-- Used to maintain a list of selected courses that can be searched though with .Contains-->
+            @if(true){
+                selectedCoursesNumber = new List<string>();
+                @if (CourseState.selectedCourses != null)
+                {
+                    @foreach (var courseItem in CourseState.selectedCourses)
+                    {
+                        selectedCoursesNumber.Add(courseItem.Number);
+                    }
+                }
+            }
+
+            <!-- Color pallet for background (based on the blue used when a drop down is opened)
+            https://convertingcolors.com/color-palette-image/view/E7F1FFFFEBF2F8EFE1E0F5EE.png -->
+
+            <!-- Reccomenendations based on this
+            https://science.ucalgary.ca/sites/default/files/teams/1/USC/CPSC-BSc-Recommended-Degree-Sequence-F23.pdf -->
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item" style="background-color: #E7F1FF;">
+                    <strong>Year 1</strong>
+                </li>
+                <li class="list-group-item">
+                    <div><b>3 Units</b> - <a href="" data-bs-toggle="modal" data-bs-target="#unsuportedCourseModal">CPSC 233</a></div>
+                    <div><b>3 Units</b> - <a href="" data-bs-toggle="modal" data-bs-target="#unsuportedCourseModal">CPSC 251</a></div>
+                    <div><b>3 Units</b> - <a href="" data-bs-toggle="modal" data-bs-target="#unsuportedCourseModal">MATH 211</a></div>
+                    <div><b>3 Units</b> - <a href="" data-bs-toggle="modal" data-bs-target="#unsuportedCourseModal">MATH 249</a> or <a href="" data-bs-toggle="modal" data-bs-target="#unsuportedCourseModal">MATH 265</a> </div>
+                    <div><b>3 Units</b> - <a href="" data-bs-toggle="modal" data-bs-target="#unsuportedCourseModal">MATH 279</a></div>
+                    <div><b>3 Units</b> - <a href="" data-bs-toggle="modal" data-bs-target="#unsuportedCourseModal">MATH 279</a></div>
+                    <div><b>6 Units</b> - <a href="" data-bs-toggle="modal" data-bs-target="#unsuportedSearchParamatersModal">Non-Science Option</a></div>
+                    <div><b>6 Units</b> - <a href="" @onclick="() => AdvancedSearchNotInFieldOfComputerScience()" @onclick:preventDefault>Non-Major Field Option</a></div>
+                </li>
+                <li class="list-group-item" style="background-color: #E7F1FF;">
+                    <strong>Year 2</strong>
+
+                </li>
+                <li class="list-group-item">
+                    <div><b>3 Units</b> - <a href="" data-bs-toggle="modal" data-bs-target="#unsuportedCourseModal">CPSC 331</a></div>
+                    @{string toAddRec = "SENG 300";}
+                    <div><b>3 Units</b> - <a href="" @onclick="() => CourseState.AddCourse(CourseList.GetCourse(toAddRec))" @onclick:preventDefault>SENG 300</a></div>
+                    <div><b>3 Units</b> - <a href="" data-bs-toggle="modal" data-bs-target="#unsuportedCourseModal">CPSC 351</a></div>
+                    <div><b>3 Units</b> - <a href="" data-bs-toggle="modal" data-bs-target="#unsuportedCourseModal">CPSC 355</a></div>
+                    <div><b>3 Units</b> - <a href="" data-bs-toggle="modal" data-bs-target="#unsuportedCourseModal">PHIL 314</a></div>
+                    <div><b>6 Units</b> - Course from the <a href="" @onclick="() => AdvancedSearchInFieldOfComputerScienceGreaterThan(299)" @onclick:preventDefault>Field of Computer Science at the 300 level or above</a></div>
+                    <div><b>3 Units</b> - <a href="" data-bs-toggle="modal" data-bs-target="#unsuportedSearchParamatersModal">Non-Science Option</a></div>
+                    <div><b>6 Units</b> - <a href="" @onclick="() => AdvancedSearchNotInFieldOfComputerScience()" @onclick:preventDefault>Non-Major Field Option</a></div>
+                </li>
+                <li class="list-group-item" style="background-color: #E7F1FF;">
+                    <strong>Year 3</strong>
+                </li>
+                <li class="list-group-item">
+                    <div><b>3 Units</b> - <a href="" data-bs-toggle="modal" data-bs-target="#unsuportedCourseModal">CPSC 413</a></div>
+                    @{toAddRec = "CPSC 449";}
+                    <div><b>3 Units</b> - <a href="" @onclick="() => CourseState.AddCourse(CourseList.GetCourse(toAddRec))" @onclick:preventDefault>CPSC 449</a></div>
+                    <div><b>3 Units</b> - <a href="" data-bs-toggle="modal" data-bs-target="#unsuportedCourseModal">CPSC 457</a></div>
+                    <div><b>3 Units</b> - Course from the <a href="" @onclick="() => AdvancedSearchInFieldOfComputerScienceGreaterThan(299)" @onclick:preventDefault>Field of Computer Science at the 300 level or above</a></div>
+                    <div><b>6 Units</b> - Course from the <a href="" @onclick="() => AdvancedSearchInFieldOfComputerScienceGreaterThan(399)" @onclick:preventDefault>Field of Computer Science at the 400 level or above</a></div>
+                    <div><b>3 Units</b> - <a href="" data-bs-toggle="modal" data-bs-target="#unsuportedSearchParamatersModal">Non-Science Option</a></div>
+                    <div><b>9 Units</b> - <a href="" @onclick="() => AdvancedSearchNotInFieldOfComputerScience()" @onclick:preventDefault>Non-Major Field Option</a></div>
+                </li>
+                <li class="list-group-item" style="background-color: #E7F1FF;">
+                    <strong>Year 4</strong>
+                </li>
+                <li class="list-group-item">
+                    <div><b>6 Units</b> - Course from the <a href="" @onclick="() => AdvancedSearchInFieldOfComputerScienceGreaterThan(399)" @onclick:preventDefault>Field of Computer Science at the 400 level or above</a></div>
+                    <div><b>9 Units</b> - Course from the <a href="" @onclick="() => AdvancedSearchInFieldOfComputerScienceGreaterThan(499)" @onclick:preventDefault>Field of Computer Science at the 500 level or above</a></div>
+                    <div><b>9 Units</b> - <a href="" @onclick="() => AdvancedSearchNotInFieldOfComputerScience()" @onclick:preventDefault>Non-Major Field Option</a></div>
+                    <div><b>6 Units</b> - <a href="" data-bs-toggle="modal" data-bs-target="#unsuportedSearchParamatersModal">Open Option</a></div>
+                </li>
+                <li class="list-group-item" style="background-color: #E7F1FF;">
+                    <strong>Additional Information</strong>
+                </li>
+                <li class="list-group-item">
+                    <div> <strong>Tip: </strong> You can click on a unsatisfied course to add to your schedule or apply a custom search criteria</div>
+                    <div> <strong>Requirement: </strong> The program must contain at least 120 units with a maximum of 48 units at the Junior Level (200 level courses) </div>
+                    <div> <strong>Non-Major Field Option: </strong> Any option NOT in in the field of Computer Science</div>
+                    <div> <strong>Non-Science Option: </strong> Any course from faculties other than the Faculty of Science, excluding courses in <a href = "https://www.ucalgary.ca/pubs/calendar/current/sc-3-4.html#2587" target="_blank" rel="noopener noreferrer">this table </a></div>
+                    <div> <strong>Open Option: </strong> Any course offered by any Faculty</div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="unsuportedCourseModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal" tabindex="-1" role="dialog"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title " id="exampleModalLabel">Warning</h5>
+                    <button type="button " class="btn-close " data-bs-dismiss="modal" aria-label="Close" ></button>
+                </div>
+                <div class="modal-body">
+                    <div class="flex-container">
+                        This course is currently under development
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Okay</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="unsuportedSearchParamatersModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal" tabindex="-1" role="dialog"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title " id="exampleModalLabel">Warning</h5>
+                    <button type="button " class="btn-close " data-bs-dismiss="modal" aria-label="Close" ></button>
+                </div>
+                <div class="modal-body">
+                    <div class="flex-container">
+                        This paramater is currently under development
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Okay</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@code {
+    private List<CourseData> courses;
+
+    private List<string> allCoursesNumber;
+
+    private List<string> selectedCoursesNumber;
+
+    protected override void OnInitialized()
+    {
+        courses = CourseList.GetList();
+        CourseState.OnCourseStateChanged += StateHasChanged;
+        //AdvancedSearchState.OnAdvancedSearchStateChanged += StateHasChanged;
+    }
+
+    public void AdvancedSearchInFieldOfComputerScienceGreaterThan(int numInput)
+    {
+        CourseState.ForceUpdate();
+        advancedSearchParamaters.setSubjectInput("CPSC");
+        advancedSearchParamaters.setSubjectInput2("SENG");
+        advancedSearchParamaters.setExcludeSubjectInput("");
+        advancedSearchParamaters.setExcludeSubjectInput2("");
+        advancedSearchParamaters.setCourseNumSymbolInput("gt");
+        advancedSearchParamaters.setCourseNumInput(numInput);
+
+        toastService.ShowSuccess("Updated advanced search criteria");
+    }
+
+    public void AdvancedSearchNotInFieldOfComputerScience()
+    {
+        CourseState.ForceUpdate();
+        advancedSearchParamaters.setSubjectInput("");
+        advancedSearchParamaters.setSubjectInput2("");
+        advancedSearchParamaters.setExcludeSubjectInput("CPSC");
+        advancedSearchParamaters.setExcludeSubjectInput2("SENG");
+        advancedSearchParamaters.setCourseNumSymbolInput("eq");
+        advancedSearchParamaters.setCourseNumInput(null);
+
+        toastService.ShowSuccess("Updated advanced search criteria");
+    }
+
+    public void DoTestingStuff()
+    {
+        Console.WriteLine("Selected Courses");
+        @foreach (String Number in selectedCoursesNumber)
+        {
+            Console.WriteLine("Course " + Number);
+        }
+        if(selectedCoursesNumber.Contains("CPSC 449")){
+            Console.WriteLine("SELECTED HAS 449");
+        }
+        else{
+            Console.WriteLine("SELECTED NOT 449");
+        }
+        CourseState.AddCourse(CourseList.GetCourse("GEOG 280"));
+
+        advancedSearchParamaters.setSubjectInput("GEOG");
+    }
+}

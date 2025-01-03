@@ -1,0 +1,174 @@
+﻿<!-- DELETE THIS PAGE LATER. THIS IS ONLY FOR REFERENCE AND EXAMPLES-->
+@page "/example"
+@using CPSC481_FinalProject.Shared
+@using Blazored.Typeahead
+@inject IJSRuntime JS
+@inject IToastService toastService
+
+<h3>Example</h3>
+
+
+<BlazoredTypeahead SearchMethod="SearchCourses" @bind-Value="someCourse">
+    <SelectedTemplate>@context.Number</SelectedTemplate>
+    <ResultTemplate>
+        @context.Number
+        (@context.Title)
+    </ResultTemplate>
+</BlazoredTypeahead>
+
+@if(someCourse != null)
+{
+    <p>Selected course: @someCourse.Number</p>
+}
+
+<br />
+<br />
+<br />
+
+<div class="form-check form-check-inline" style=" margin: 0pt">
+    <input class="form-check-input" type="checkbox" id="inlineCheckbox1" @oninput="TestFunc" checked="@ticked">
+    <label class="form-check-label" for="inlineCheckbox1">
+        <strong id="section-selected"> Lec 01 Tut 01 </strong><br />
+        <span id="section-times">
+            Lec: MWF 12:00pm-12:50pm <br />
+            Tut: MW &nbsp&nbsp 3:00pm-3:50pm
+        </span>
+    </label>
+</div>
+
+@if (testCourse.IsVisible == true)
+{
+    <p>TRUE</p>
+}
+else
+{
+    <p>FALSE</p>
+}
+
+<button type="button" class="btn btn-secondary" @onclick="TestFunc">Select All</button>
+
+<br />
+<br />
+<br />
+
+<button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Tooltip on top">
+    Tooltip on top
+</button>
+
+<button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="right" title="Tooltip on right">
+    Tooltip on right
+</button>
+
+
+<br />
+<br />
+<br />
+
+<button type="button" class="btn btn-lg btn-danger" data-bs-toggle="popover" title="Popover title" data-bs-content="And here's some amazing content. It's very engaging. Right?">Click to toggle popover</button>
+
+<br />
+<br />
+<br />
+
+<button class="btn btn-info" @onclick="@(() => toastService.ShowInfo("I'm an INFO message"))">Info Toast</button>
+<button class="btn btn-success" @onclick="@(() => toastService.ShowSuccess("I'm a SUCCESS message with a custom title"))">Success Toast</button>
+<button class="btn btn-warning" @onclick="@(() => toastService.ShowWarning("I'm a WARNING message"))">Warning Toast</button>
+<button class="btn btn-danger" @onclick="@(() => toastService.ShowError("I'm an ERROR message"))">Error Toast</button>
+
+<br />
+<br />
+<br />
+
+<!-- Can be called directly as shown here -->
+@switch (CourseList.GetStatus("CPSC 449")) @* might want to modularize this somehow *@
+{
+    case 1:
+        <span class="badge rounded-pill bg-primary mx-2" style="font-size: 7pt">ENROLLING</span>
+        break;
+    case 2:
+        <span class="badge rounded-pill bg-warning mx-2" style="font-size: 7pt">WAITLISTED</span>
+        break;
+    case 3:
+        <span class="badge rounded-pill bg-success mx-2" style="font-size: 7pt">ENROLLED</span>
+        break;
+    case 4:
+        <span class="badge rounded-pill bg-danger mx-2" style="font-size: 7pt">DROPPING</span>
+        break;
+}
+
+<p>@CourseList.GetNumber("CPSC 449")</p>
+<p>@CourseList.GetTitle("CPSC 449")</p>
+<p>@CourseList.GetSeats("CPSC 449")</p>
+<p>@CourseList.GetWaitlist("CPSC 449")</p>
+<p>@CourseList.GetProfessor("CPSC 449")</p>
+<p>@CourseList.GetLocation("CPSC 449")</p>
+<p>@CourseList.GetDescription("CPSC 449")</p>
+
+<br />
+<br />
+<br />
+
+<!-- Or it can be called using variables as shown here and in the code below -->
+<p>@number</p>
+<p>@title</p>
+<p>@seats</p>
+<p>@waitlist</p>
+<p>@professor</p>
+<p>@location</p>
+<p>@description</p>
+<p>@CourseList.GetPrereq("CPSC 481").Number</p>
+
+
+<br />
+<br />
+<br />
+
+<!-- Another example cause why not -->
+<p>@CourseList.GetNumber(useID)</p>
+<p>@CourseList.GetTitle(useID)</p>
+<p>@CourseList.GetSeats(useID)</p>
+<p>@CourseList.GetWaitlist(useID)</p>
+<p>@CourseList.GetProfessor(useID)</p>
+<p>@CourseList.GetLocation(useID)</p>
+<p>@CourseList.GetDescription(useID)</p>
+
+@code {
+    private string number = CourseList.GetNumber("CPSC 481");
+    private string title = CourseList.GetTitle("CPSC 481");
+    private string seats = CourseList.GetSeats("CPSC 481");
+    private string waitlist = CourseList.GetWaitlist("CPSC 481");
+    private string professor = CourseList.GetProfessor("CPSC 481");
+    private string location = CourseList.GetLocation("CPSC 481");
+    private string description = CourseList.GetDescription("CPSC 481");
+
+    private string useID = CourseList.GetNumber("CPSC 399");
+
+    private bool ticked = true;
+    private CourseData testCourse;
+
+    // BREAK
+
+    private List<CourseData> courses;
+    private CourseData someCourse;
+
+    protected override void OnInitialized()
+    {
+        courses = CourseList.GetList();
+        testCourse = CourseList.GetCourse("CPSC 449");
+    }
+
+    
+
+    private async Task<IEnumerable<CourseData>> SearchCourses(string searchText)
+    {
+        return await Task.FromResult(courses.Where(x => x.Number.ToLower().Contains(searchText.ToLower()) || 
+                                                        x.Title.ToLower().Contains(searchText.ToLower()) ||
+                                                        x.Professor.ToLower().Contains(searchText.ToLower())).ToList());
+    }
+
+    private void TestFunc()
+    {
+        testCourse.IsVisible = !testCourse.IsVisible;
+        ticked = !ticked;
+    }
+}

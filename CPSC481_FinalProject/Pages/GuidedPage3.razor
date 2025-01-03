@@ -1,0 +1,837 @@
+﻿@page "/guided3"
+@inject IToastService toastService
+@inject ICourseState CourseState
+
+<!-- Container below the header bar -->
+<div class="h-flex">
+    <!-- Step Buttons -->
+    <div class="d-flex justify-content-center" style="padding-top: 10px; padding-bottom: 10px; background-color: rgba(128, 128, 128, 0.2);">
+        <div class="container">
+            <div class="d-flex justify-content-center">
+                <ul class="list-unstyled d-flex mb-0">
+                    <li class="step">
+                        <div class="d-flex flex-column align-items-center">
+                            <NavLink href="guided">
+                                <button type="button" class="btn btn-outline-primary btn-circle btn-xl">1</button>
+                            </NavLink>
+                            <span class="mt-2">Select Courses</span>
+                        </div>
+                    </li>
+                    <li class="step mx-5 d-flex align-items-center">
+                        <div class="line bg-primary"></div>
+                        <div class="d-flex flex-column align-items-center">
+                            <NavLink href="guided2">
+                            <button type="button" class="btn btn-outline-primary btn-circle btn-xl"> 2 </button>
+                            </NavLink>
+                            <span class="mt-2">Select Schedule</span>
+                        </div>
+                    </li>
+                    <li class="step d-flex align-items-center">
+                        <div class="line bg-primary"></div>
+                        <div class="d-flex flex-column align-items-center">
+                            <button type="button" class="btn btn-primary btn-circle btn-xl"> 3 </button>
+                            <span class="mt-2">Get Schedule</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Select Schedule -->
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="centered-container">
+                    <div class="rounded-box align-items-center">
+                        <div class="content-container">
+                            <div class="d-flex " style="height: 75vh;">
+                                <div class=" vstack justify-content-center "style="flex: 2;">
+                                    <GuidedScheduleMain3 />
+                                </div>
+                                <div class="table-background vstack justify-content-center align-items-center">
+                                    <div class= "table-rounded-box m-2">
+                                    <!-- Enrollment table -->
+                                    <table class="table table-striped">
+                                        <thead class="table-dark">
+                                            <tr>
+                                                <th>Course Name</th>
+                                                <th>Waitlist if full?</th>
+                                                <th>Status</th>
+                                                <th>Issues</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (CourseState.selectedCourses.Contains(CourseList.GetCourse("CPSC 399")))
+                                            {
+                                                @if (CourseState.Courses["CPSC 399"].IsVisible == true)
+                                                {
+                                                    <tr>
+                                                        <td>CPSC 399</td>
+                                                        @if (CourseState.Courses["CPSC 399"].Status == 1 || CourseState.Courses["CPSC 399"].Status == 2)
+                                                        {
+                                                            <td>
+                                                                <input class="form-check-input" type="checkbox" id="defaultCheck1" checked>
+                                                            </td>
+                                                            <td style="color: blue;">Enrolling</td>
+                                                        }
+                                                        else if (CourseState.Courses["CPSC 399"].Status == 3)
+                                                        {
+                                                            <td>
+                                                                <input class="form-check-input" type="checkbox" id="defaultCheck3" disabled>
+                                                                <label class="form-check-label" for="defaultCheck3">
+                                                                    N/A
+                                                                </label>
+                                                            </td>
+                                                            <td style="color: green;">Enrolled</td>
+                                                        }
+                                                        <td>N/A</td>
+                                                    </tr>
+                                                }
+
+                                                else if (CourseState.Courses["CPSC 399"].Status == 4)
+                                                {
+                                                    <tr>
+                                                        <td>CPSC 399</td>
+                                                        <td>
+                                                            <input class="form-check-input" type="checkbox" id="defaultCheck3" disabled>
+                                                            <label class="form-check-label" for="defaultCheck3">
+                                                                N/A
+                                                            </label>
+                                                        </td>
+                                                        <td style="color: red;">Dropping</td>
+                                                        <td>N/A</td>
+                                                    </tr>
+                                                }
+                                            }
+                                            @if (CourseState.selectedCourses.Contains(CourseList.GetCourse("GEOG 280")))
+                                            {
+
+                                                @if (CourseState.Courses["GEOG 280"].IsVisible == true)
+                                                {
+                                                    <tr>
+                                                        <td>GEOG 280</td>
+                                                        @if (CourseState.Courses["GEOG 280"].Status == 1 || CourseState.Courses["GEOG 280"].Status == 2)
+                                                        {
+                                                            <td>
+                                                                <input class="form-check-input" type="checkbox" id="defaultCheck1" checked>
+                                                            </td>
+                                                            <td style="color: blue;">Enrolling</td>
+                                                        }
+                                                        else if (CourseState.Courses["GEOG 280"].Status == 3)
+                                                        {
+                                                            <td>
+                                                                <input class="form-check-input" type="checkbox" id="defaultCheck3" disabled>
+                                                                <label class="form-check-label" for="defaultCheck3">
+                                                                    N/A
+                                                                </label>
+                                                            </td>
+                                                            <td style="color: green;">Enrolled</td>
+                                                        }
+                                                        <td>N/A</td>
+                                                    </tr>
+                                                }
+                                                else if (CourseState.Courses["GEOG 280"].Status == 4)
+                                                {
+                                                    <tr>
+                                                        <td>GEOG 280</td>
+                                                        <td>
+                                                            <input class="form-check-input" type="checkbox" id="defaultCheck3" disabled>
+                                                            <label class="form-check-label" for="defaultCheck3">
+                                                                N/A
+                                                            </label>
+                                                        </td>
+                                                        <td style="color: red;">Dropping</td>
+                                                        <td>N/A</td>
+                                                    </tr>
+                                                }
+
+                                            }
+                                            @if (CourseState.selectedCourses.Contains(CourseList.GetCourse("ASPH 305")))
+                                            {
+
+                                                @if (CourseState.Courses["ASPH 305"].IsVisible == true)
+                                                {
+                                                    <tr>
+                                                        <td>ASPH 305</td>
+                                                        @if (CourseState.Courses["ASPH 305"].Status == 1)
+                                                        {
+                                                            <td>
+                                                                <input class="form-check-input" type="checkbox" id="inlineCheckbox1" @onclick="() => OnCheck1()" checked>
+                                                            </td>
+                                                            <td style="color: blue;">Enrolling</td>
+                                                            if (CourseState.Courses["ASPH 305"].WtlstCheck == true)
+                                                            {
+                                                                <td>The Seats for ASPH 305 are full, you will be placed on the Waitlist.</td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td>The Seats for ASPH 305 are full, you will not be enrolled.</td>
+                                                            }
+
+
+                                                        }
+                                                        else if (CourseState.Courses["ASPH 305"].Status == 2)
+                                                        {
+                                                            <td>
+                                                                <input class="form-check-input" type="checkbox" id="defaultCheck1" disabled>
+                                                                <label class="form-check-label" for="defaultCheck3">
+                                                                    N/A
+                                                                </label>
+                                                            </td>
+                                                            <td style="color: orange;">Waitlisted</td>
+                                                            <td>N/A</td>
+
+                                                        }
+                                                        else if (CourseState.Courses["ASPH 305"].Status == 3)
+                                                        {
+                                                            <td>
+                                                                <input class="form-check-input" type="checkbox" id="defaultCheck3" disabled>
+                                                                <label class="form-check-label" for="defaultCheck3">
+                                                                    N/A
+                                                                </label>
+                                                            </td>
+                                                            <td style="color: green;">Enrolled</td>
+                                                        }
+                                                    </tr>
+                                                }
+
+                                                else if (CourseState.Courses["ASPH 305"].Status == 4)
+                                                {
+                                                    <tr>
+                                                        <td>ASPH 305</td>
+                                                        <td>
+                                                            <input class="form-check-input" type="checkbox" id="defaultCheck3" disabled>
+                                                            <label class="form-check-label" for="defaultCheck3">
+                                                                N/A
+                                                            </label>
+                                                        </td>
+                                                        <td style="color: red;">Dropping</td>
+                                                        <td>N/A</td>
+                                                    </tr>
+                                                }
+
+                                            }
+
+                                            @if (CourseState.selectedCourses.Contains(CourseList.GetCourse("CPSC 481")))
+                                            {
+
+
+                                                @if (CourseState.Courses["CPSC 481"].IsVisible == true)
+                                                {
+                                                    <tr>
+                                                        <td>CPSC 481</td>
+                                                        @if (CourseState.Courses["CPSC 481"].Status == 1 || CourseState.Courses["CPSC 481"].Status == 2)
+                                                        {
+                                                            <td>
+                                                                <input class="form-check-input" type="checkbox" id="defaultCheck1" checked>
+                                                            </td>
+                                                            <td style="color: blue;">Enrolling</td>
+                                                        }
+                                                        else if (CourseState.Courses["CPSC 481"].Status == 3)
+                                                        {
+                                                            <td>
+                                                                <input class="form-check-input" type="checkbox" id="defaultCheck3" disabled>
+                                                                <label class="form-check-label" for="defaultCheck3">
+                                                                    N/A
+                                                                </label>
+                                                            </td>
+                                                            <td style="color: green;">Enrolled</td>
+                                                        }
+                                                        <td>N/A</td>
+                                                    </tr>
+                                                }
+                                                else if (CourseState.Courses["CPSC 481"].Status == 4)
+                                                {
+                                                    <tr>
+                                                        <td>CPSC 481</td>
+                                                        <td>
+                                                            <input class="form-check-input" type="checkbox" id="defaultCheck3" disabled>
+                                                            <label class="form-check-label" for="defaultCheck3">
+                                                                N/A
+                                                            </label>
+                                                        </td>
+                                                        <td style="color: red;">Dropping</td>
+                                                        <td>N/A</td>
+                                                    </tr>
+                                                }
+
+                                            }
+
+                                            @if (CourseState.selectedCourses.Contains(CourseList.GetCourse("SENG 300")))
+                                            {
+
+                                                @if (CourseState.Courses["SENG 300"].IsVisible == true)
+                                                {
+                                                    <tr>
+                                                        <td>SENG 300</td>
+                                                        @if (CourseState.Courses["SENG 300"].Status == 1 || CourseState.Courses["SENG 300"].Status == 2)
+                                                        {
+                                                            <td>
+                                                                <input class="form-check-input" type="checkbox" id="defaultCheck1" checked>
+                                                            </td>
+                                                            <td style="color: blue;">Enrolling</td>
+                                                        }
+                                                        else if (CourseState.Courses["SENG 300"].Status == 3)
+                                                        {
+                                                            <td>
+                                                                <input class="form-check-input" type="checkbox" id="defaultCheck3" disabled>
+                                                                <label class="form-check-label" for="defaultCheck3">
+                                                                    N/A
+                                                                </label>
+                                                            </td>
+                                                            <td style="color: green;">Enrolled</td>
+                                                        }
+                                                        <td>Issue you already have credits for SENG 300</td>
+                                                    </tr>
+                                                }
+
+                                                else if (CourseState.Courses["SENG 300"].Status == 4)
+                                                {
+                                                    <tr>
+                                                        <td>SENG 300</td>
+                                                        <td>
+                                                            <input class="form-check-input" type="checkbox" id="defaultCheck3" disabled>
+                                                            <label class="form-check-label" for="defaultCheck3">
+                                                                N/A
+                                                            </label>
+                                                        </td>
+                                                        <td style="color: red;">Dropping</td>
+                                                        <td>N/A</td>
+                                                    </tr>
+                                                }
+
+                                            }
+
+                                            @if (CourseState.selectedCourses.Contains(CourseList.GetCourse("CPSC 449")))
+                                            {
+
+                                                @if (CourseState.Courses["CPSC 449"].IsVisible == true)
+                                                {
+                                                    <tr>
+                                                        <td>CPSC 449</td>
+                                                        @if (CourseState.Courses["CPSC 449"].Status == 1 || CourseState.Courses["CPSC 449"].Status == 2)
+                                                        {
+                                                            <td>
+                                                                <input class="form-check-input" type="checkbox" id="defaultCheck1" checked>
+                                                            </td>
+                                                            <td style="color: blue;">Enrolling</td>
+                                                        }
+                                                        else if (CourseState.Courses["CPSC 449"].Status == 3)
+                                                        {
+                                                            <td>
+                                                                <input class="form-check-input" type="checkbox" id="defaultCheck3" disabled>
+                                                                <label class="form-check-label" for="defaultCheck3">
+                                                                    N/A
+                                                                </label>
+                                                            </td>
+                                                            <td style="color: green;">Enrolled</td>
+                                                        }
+                                                        <td>N/A</td>
+                                                    </tr>
+                                                }
+
+                                                else if (CourseState.Courses["CPSC 449"].Status == 4)
+                                                {
+                                                    <tr>
+                                                        <td>CPSC 449</td>
+                                                        <td>
+                                                            <input class="form-check-input" type="checkbox" id="defaultCheck3" disabled>
+                                                            <label class="form-check-label" for="defaultCheck3">
+                                                                N/A
+                                                            </label>
+                                                        </td>
+                                                        <td style="color: red;">Dropping</td>
+                                                        <td>N/A</td>
+                                                    </tr>
+                                                }
+
+                                            }
+                                            @if (CourseState.selectedCourses.Contains(CourseList.GetCourse("ASTR 209")))
+                                            {
+
+                                                @if (CourseState.Courses["ASTR 209"].IsVisible == true)
+                                                {
+                                                    <tr>
+                                                        <td>ASTR 209</td>
+                                                        @if (CourseState.Courses["ASTR 209"].Status == 1 || CourseState.Courses["ASTR 209"].Status == 2)
+                                                        {
+                                                            <td>
+                                                                <input class="form-check-input" type="checkbox" id="defaultCheck1" checked>
+                                                            </td>
+                                                            <td style="color: blue;">Enrolling</td>
+                                                        }
+                                                        else if (CourseState.Courses["ASTR 209"].Status == 3)
+                                                        {
+                                                            <td>
+                                                                <input class="form-check-input" type="checkbox" id="defaultCheck3" disabled>
+                                                                <label class="form-check-label" for="defaultCheck3">
+                                                                    N/A
+                                                                </label>
+                                                            </td>
+                                                            <td style="color: green;">Enrolled</td>
+                                                        }
+                                                        <td>N/A</td>
+                                                    </tr>
+                                                }
+
+                                                else if (CourseState.Courses["ASTR 209"].Status == 4)
+                                                {
+                                                    <tr>
+                                                        <td>ASTR 209</td>
+                                                        <td>
+                                                            <input class="form-check-input" type="checkbox" id="defaultCheck3" disabled>
+                                                            <label class="form-check-label" for="defaultCheck3">
+                                                                N/A
+                                                            </label>
+                                                        </td>
+                                                        <td style="color: red;">Dropping</td>
+                                                        <td>N/A</td>
+                                                    </tr>
+                                                }
+
+                                            }
+                                        </tbody>
+                                    </table>
+                                    <div class="button-container text-center">
+                                            @if (CourseState.selectedCourses.Contains(CourseList.GetCourse("SENG 300")))
+                                            {
+                                                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#sengSchedule"> Confirm</button>
+                                            }
+                                            else
+                                            {
+                                                @if ((CourseState.selectedCourses.Contains(CourseList.GetCourse("CPSC 481")) && CourseState.Courses["CPSC 481"].Status == 4) || (CourseState.selectedCourses.Contains(CourseList.GetCourse("CPSC 449")) && CourseState.Courses["CPSC 449"].Status == 4) || (CourseState.selectedCourses.Contains(CourseList.GetCourse("CPSC 399")) && CourseState.Courses["CPSC 399"].Status == 4) || (CourseState.selectedCourses.Contains(CourseList.GetCourse("GEOG 280")) && CourseState.Courses["GEOG 280"].Status == 4) || (CourseState.selectedCourses.Contains(CourseList.GetCourse("ASTR 209")) && CourseState.Courses["ASTR 209"].Status == 4) || (CourseState.selectedCourses.Contains(CourseList.GetCourse("ASPH 305")) && CourseState.Courses["ASPH 305"].Status == 4))
+                                                {
+                                                    @* aat least 1 course being dropped *@
+                                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#dropSchedule">Confirm</button>
+                                                }
+                                                else
+                                                {
+                                                    @* no course being dropped *@
+                                                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#noDropSchedule" @onclick="() => FinishEnrollment()">Confirm</button>
+                                                }
+                                            }
+
+                                        <NavLink href="guided2">
+                                            <button type="button" class="btn btn-secondary m-1" data-bs-dismiss="modal">Back</button>
+                                        </NavLink>
+                                    </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="noDropSchedule" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="noDropScheduleLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="noDropScheduleLabel">Schedule Enrollment was Successful</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="flex-container">
+                    <label>You are currently enrolled in:</label>
+                    <ul>
+                        @if (CourseState.selectedCourses.Contains(CourseList.GetCourse("CPSC 481")) && CourseState.Courses["CPSC 481"].Status == 3)
+                        {
+                            <li>CPSC 481</li>
+                        }
+                        @if (CourseState.selectedCourses.Contains(CourseList.GetCourse("CPSC 449")) && CourseState.Courses["CPSC 449"].Status == 3)
+                        {
+                            <li>CPSC 449</li>
+                        }
+                        @if (CourseState.selectedCourses.Contains(CourseList.GetCourse("CPSC 399")) && CourseState.Courses["CPSC 399"].Status == 3)
+                        {
+                            <li>CPSC 399</li>
+                        }
+                        @if (CourseState.selectedCourses.Contains(CourseList.GetCourse("GEOG 280")) && CourseState.Courses["GEOG 280"].Status == 3)
+                        {
+                            <li>GEOG 280</li>
+                        }
+                        @if (CourseState.selectedCourses.Contains(CourseList.GetCourse("ASTR 209")) && CourseState.Courses["ASTR 209"].Status == 3)
+                        {
+                            <li>ASTR 209</li>
+                        }
+
+                    </ul>
+                </div>
+
+                <div class="flex-container">
+                    <label>You are currently waitlisted in:</label>
+                    <ul>
+                        @if (CourseState.selectedCourses.Contains(CourseList.GetCourse("ASPH 305")) && CourseState.Courses["ASPH 305"].Status == 2)
+                        {
+                            <li>ASPH 305</li>
+                        }
+                    </ul>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="dropSchedule" tabindex="-1" aria-labelledby="dropScheduleLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal" tabindex="-1" role="dialog"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="dropScheduleLabel">DROP CONFIRMATION</h5>
+            </div>
+            <div class="modal-body">
+                <div class="flex-container" style="justify-content: left">
+                    <label style="color: red; justify-content: left">Are you sure you want to drop:</label>
+                    <ul>
+                        @if (CourseState.selectedCourses.Contains(CourseList.GetCourse("CPSC 481")) && CourseState.Courses["CPSC 481"].Status == 4)
+                        {
+                            <li>CPSC 481</li>
+                        }
+                        @if (CourseState.selectedCourses.Contains(CourseList.GetCourse("CPSC 449")) && CourseState.Courses["CPSC 449"].Status == 4)
+                        {
+
+                            <li>CPSC 449</li>
+
+                        }
+                        @if (CourseState.selectedCourses.Contains(CourseList.GetCourse("CPSC 399")) && CourseState.Courses["CPSC 399"].Status == 4)
+                        {
+
+                            <li>CPSC 399</li>
+
+                        }
+                        @if (CourseState.selectedCourses.Contains(CourseList.GetCourse("GEOG 280")) && CourseState.Courses["GEOG 280"].Status == 4)
+                        {
+
+                            <li>GEOG 280</li>
+
+                        }
+                        @if (CourseState.selectedCourses.Contains(CourseList.GetCourse("ASTR 209")) && CourseState.Courses["ASTR 209"].Status == 4)
+                        {
+
+                            <li>ASTR 209</li>
+
+                        }
+                        @if (CourseState.selectedCourses.Contains(CourseList.GetCourse("ASPH 305")) && CourseState.Courses["ASPH 305"].Status == 4)
+                        {
+
+                            <li>ASPH 305</li>
+
+                        }
+                        @if (CourseState.selectedCourses.Contains(CourseList.GetCourse("SENG 300")) && CourseState.Courses["SENG 300"].Status == 4)
+                        {
+
+                            <li>SENG 300</li>
+
+                        }
+                    </ul>
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#successSchedule" @onclick="() => FinishEnrollment()">Confirm</button>
+                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Back</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="successSchedule" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="successScheduleLabel">Schedule Enrollment was Successful</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="flex-container">
+                    <label>You are currenlty enrolled in:</label>
+                    <ul>
+                        @if (CourseState.selectedCourses.Contains(CourseList.GetCourse("CPSC 481")) && CourseState.Courses["CPSC 481"].Status == 3)
+                        {
+                            <li>CPSC 481</li>
+                        }
+                        @if (CourseState.selectedCourses.Contains(CourseList.GetCourse("CPSC 449")) && CourseState.Courses["CPSC 449"].Status == 3)
+                        {
+                            <li>CPSC 449</li>
+                        }
+                        @if (CourseState.selectedCourses.Contains(CourseList.GetCourse("CPSC 399")) && CourseState.Courses["CPSC 399"].Status == 3)
+                        {
+                            <li>CPSC 399</li>
+                        }
+                        @if (CourseState.selectedCourses.Contains(CourseList.GetCourse("GEOG 280")) && CourseState.Courses["GEOG 280"].Status == 3)
+                        {
+                            <li>GEOG 280</li>
+                        }
+                        @if (CourseState.selectedCourses.Contains(CourseList.GetCourse("ASTR 209")) && CourseState.Courses["ASTR 209"].Status == 3)
+                        {
+                            <li>ASTR 209</li>
+                        }
+
+                    </ul>
+                </div>
+                <div class="flex-container">
+                    <label>You have successfully been dropped from:</label>
+                    <ul>
+                        @if (CourseState.selectedCourses.Contains(CourseList.GetCourse("CPSC 481")) && CourseState.Courses["CPSC 481"].Status == 1)
+                        {
+                            <li>CPSC 481</li>
+                        }
+                        @if (CourseState.selectedCourses.Contains(CourseList.GetCourse("CPSC 449")) && CourseState.Courses["CPSC 449"].Status == 1)
+                        {
+                            <li>CPSC 449</li>
+                        }
+                        @if (CourseState.selectedCourses.Contains(CourseList.GetCourse("CPSC 399")) && CourseState.Courses["CPSC 399"].Status == 1)
+                        {
+                            <li>CPSC 399</li>
+                        }
+                        @if (CourseState.selectedCourses.Contains(CourseList.GetCourse("GEOG 280")) && CourseState.Courses["GEOG 280"].Status == 1)
+                        {
+                            <li>GEOG 280</li>
+                        }
+                        @if (CourseState.selectedCourses.Contains(CourseList.GetCourse("ASTR 209")) && CourseState.Courses["ASTR 209"].Status == 1)
+                        {
+                            <li>ASTR 209</li>
+                        }
+                        @if (CourseState.selectedCourses.Contains(CourseList.GetCourse("ASPH 305")) && CourseState.Courses["ASPH 305"].Status == 1)
+                        {
+                            <li>ASPH 305</li>
+                        }
+                        @if (CourseState.selectedCourses.Contains(CourseList.GetCourse("SENG 300")) && CourseState.Courses["SENG 300"].Status == 1)
+                        {
+                            <li>SENG 300</li>
+                        }
+                    </ul>
+                </div>
+                <div class="flex-container">
+                    <label>You are currently waitlisted in:</label>
+                    <ul>
+                        @if (CourseState.selectedCourses.Contains(CourseList.GetCourse("ASPH 305")) && CourseState.Courses["ASPH 305"].Status == 2)
+                        {
+                            <li>ASPH 305</li>
+                        }
+                    </ul>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .btn-circle.btn-xl {
+        width: 50px;
+        height: 50px;
+        padding: 13px 18px;
+        border-radius: 60px;
+        font-size: 15px;
+        text-align: center;
+    }
+
+    .line {
+        height: 4px;
+        width: 100px;
+        margin-right: -10px;
+        margin-left: -60px;
+        margin-top: -30px;
+        z-index: -1;
+        position: relative;
+    }
+
+    .rounded-box {
+        margin-top: 10px;
+        border: 1px solid #000;
+        border-radius: 10px;
+        background-color: white;
+        height: 75vh;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 1);
+        overflow: hidden;
+    }
+
+    .content-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border-radius: 10px;
+        height: 75vh;
+        overflow: hidden;
+    }
+
+    .button-container {
+        margin-top: 1rem;
+    }
+
+    .larger-table {
+        font-size: 1.5rem;
+        width: 100%;
+        height: 30vh
+    }
+
+    .larger-table th,
+    .larger-table td {
+        padding: 1rem;
+    }
+
+    .table-background{
+        background-color: #e9ecef;
+        max-width: 40%;
+        min-height: 60vh;
+        border-left: 5px solid #ccc; /* Seperation between recommened and Course Search*/
+    }
+
+    .table-rounded-box {
+        border: 1px solid #000;
+        border-radius: 10px;
+        background-color: white;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, .5);
+        overflow: hidden;
+    }
+</style>
+
+@code {
+
+    private bool isChecked1 = true;
+    private void OnCheck1()
+    {
+        CourseState.ChangeWtlstCheck("ASPH 305");
+    }
+
+    private void FinishEnrollment()
+    {
+        if (CourseState.selectedCourses.Contains(CourseList.GetCourse("CPSC 481")) && CourseState.Courses["CPSC 481"].IsVisible == false && CourseState.Courses["CPSC 481"].Status == 1)
+        {
+            CourseState.RemoveCourse(CourseState.Courses["CPSC 481"]);
+        }
+        if (CourseState.selectedCourses.Contains(CourseList.GetCourse("CPSC 449")) && CourseState.Courses["CPSC 449"].IsVisible == false && CourseState.Courses["CPSC 449"].Status == 1)
+        {
+            CourseState.RemoveCourse(CourseState.Courses["CPSC 449"]);
+        }
+        if (CourseState.selectedCourses.Contains(CourseList.GetCourse("CPSC 399")) && CourseState.Courses["CPSC 399"].IsVisible == false && CourseState.Courses["CPSC 399"].Status == 1)
+        {
+            CourseState.RemoveCourse(CourseState.Courses["CPSC 399"]);
+        }
+        if (CourseState.selectedCourses.Contains(CourseList.GetCourse("GEOG 280")) && CourseState.Courses["GEOG 280"].IsVisible == false && CourseState.Courses["GEOG 280"].Status == 1)
+        {
+            CourseState.RemoveCourse(CourseState.Courses["GEOG 280"]);
+        }
+        if (CourseState.selectedCourses.Contains(CourseList.GetCourse("ASTR 209")) && CourseState.Courses["ASTR 209"].IsVisible == false && CourseState.Courses["ASTR 209"].Status == 1)
+        {
+            CourseState.RemoveCourse(CourseState.Courses["ASTR 209"]);
+        }
+        if (CourseState.selectedCourses.Contains(CourseList.GetCourse("ASPH 305")) && CourseState.Courses["ASPH 305"].IsVisible == false && CourseState.Courses["ASPH 305"].Status == 1)
+        {
+            CourseState.RemoveCourse(CourseState.Courses["ASPH 305"]);
+        }
+        if (CourseState.selectedCourses.Contains(CourseList.GetCourse("SENG 300")) && CourseState.Courses["SENG 300"].IsVisible == false && CourseState.Courses["SENG 300"].Status == 1)
+        {
+            CourseState.RemoveCourse(CourseState.Courses["SENG 300"]);
+        }
+
+        @* from dropped to enrolling *@
+        if (CourseState.selectedCourses.Contains(CourseList.GetCourse("CPSC 481")) && CourseState.Courses["CPSC 481"].Status == 4)
+        {
+            CourseState.HideCourse("CPSC 481");
+            CourseState.ChangeStatus(1, "CPSC 481");
+        }
+        if (CourseState.selectedCourses.Contains(CourseList.GetCourse("CPSC 449")) && CourseState.Courses["CPSC 449"].Status == 4)
+        {
+            CourseState.HideCourse("CPSC 449");
+            CourseState.ChangeStatus(1, "CPSC 449");
+        }
+        if (CourseState.selectedCourses.Contains(CourseList.GetCourse("CPSC 399")) && CourseState.Courses["CPSC 399"].Status == 4)
+        {
+            CourseState.HideCourse("CPSC 399");
+            CourseState.ChangeStatus(1, "CPSC 399");
+
+        }
+        if (CourseState.selectedCourses.Contains(CourseList.GetCourse("GEOG 280")) && CourseState.Courses["GEOG 280"].Status == 4)
+        {
+            CourseState.HideCourse("GEOG 280");
+            CourseState.ChangeStatus(1, "GEOG 280");
+
+        }
+        if (CourseState.selectedCourses.Contains(CourseList.GetCourse("ASTR 209")) && CourseState.Courses["ASTR 209"].Status == 4)
+        {
+            CourseState.HideCourse("ASTR 209");
+            CourseState.ChangeStatus(1, "ASTR 209");
+
+        }
+        if (CourseState.selectedCourses.Contains(CourseList.GetCourse("ASPH 305")) && CourseState.Courses["ASPH 305"].Status == 4)
+        {
+            CourseState.HideCourse("ASPH 305");
+            CourseState.ChangeStatus(1, "ASPH 305");
+
+        }
+        if (CourseState.selectedCourses.Contains(CourseList.GetCourse("SENG 300")) && CourseState.Courses["SENG 300"].Status == 4)
+        {
+            CourseState.HideCourse("SENG 300");
+            CourseState.ChangeStatus(1, "SENG 300");
+
+        }
+
+
+        if (CourseState.selectedCourses.Contains(CourseList.GetCourse("CPSC 481")) && CourseState.Courses["CPSC 481"].Status == 1 && CourseState.Courses["CPSC 481"].IsVisible == true)
+        {
+            if (CourseState.Courses["CPSC 481"].isFirstTime == true)
+            {
+                CourseState.ChangeStatus(3, "CPSC 481");
+            }
+        }
+        if (CourseState.selectedCourses.Contains(CourseList.GetCourse("CPSC 449")) && CourseState.Courses["CPSC 449"].Status == 1 && CourseState.Courses["CPSC 449"].IsVisible == true)
+        {
+            if (CourseState.Courses["CPSC 449"].isFirstTime == true || CourseState.Courses["CPSC 449"].checkedTime2 == true)
+            {
+                CourseState.ChangeStatus(3, "CPSC 449");
+            }
+        }
+        if (CourseState.selectedCourses.Contains(CourseList.GetCourse("CPSC 399")) && CourseState.Courses["CPSC 399"].Status == 1 && CourseState.Courses["CPSC 399"].IsVisible == true)
+        {
+            if (CourseState.Courses["CPSC 399"].isFirstTime == true)
+            {
+                CourseState.ChangeStatus(3, "CPSC 399");
+            }
+        }
+        if (CourseState.selectedCourses.Contains(CourseList.GetCourse("GEOG 280")) && CourseState.Courses["GEOG 280"].Status == 1 && CourseState.Courses["GEOG 280"].IsVisible == true)
+        {
+            if (CourseState.Courses["GEOG 280"].isFirstTime == true)
+            {
+                CourseState.ChangeStatus(3, "GEOG 280");
+            }
+        }
+        if (CourseState.selectedCourses.Contains(CourseList.GetCourse("ASTR 209")) && CourseState.Courses["ASTR 209"].Status == 1 && CourseState.Courses["ASTR 209"].IsVisible == true)
+        {
+            if (CourseState.Courses["CPSC 481"].isFirstTime == true)
+            {
+                CourseState.ChangeStatus(3, "ASTR 209");
+            }
+        }
+        if (CourseState.selectedCourses.Contains(CourseList.GetCourse("ASPH 305")) && CourseState.Courses["ASPH 305"].Status == 1 && CourseState.Courses["ASPH 305"].IsVisible == true)
+        {
+            if (CourseState.Courses["ASPH 305"].isFirstTime == true)
+            {
+                if (CourseState.Courses["ASPH 305"].WtlstCheck == true)
+                {
+                    CourseState.ChangeStatus(2, "ASPH 305");
+                }
+            }
+        }
+
+        if (CourseState.selectedCourses.Contains(CourseList.GetCourse("SENG 300")) && CourseState.Courses["SENG 300"].Status == 1 && CourseState.Courses["SENG 300"].IsVisible == true)
+        {
+            if (CourseState.Courses["SENG 300"].isFirstTime == true)
+            {
+                CourseState.ChangeStatus(3, "SENG 300");
+            }
+        }
+    }
+}

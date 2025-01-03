@@ -1,0 +1,41 @@
+﻿#collapseButton {
+    width: fit-content;
+    margin: 5px;
+}
+
+
+#sidebarHeader {
+    border-right: 1.5px solid black;
+    font-size: 1.5rem;
+    /* background-color: red; */
+    /* background-image: linear-gradient(180deg, rgb(235, 11, 11) 0%, #f9f3f3 70%); */
+    background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+    color: white;
+}
+
+#sidebarTitle {
+    writing-mode: vertical-rl;
+    margin: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+
+#wrapper-collapsibleBar {
+    max-width: 35%;
+}
+
+#wrapper-hiddenBar {
+    background-color: #e9ecef;
+    flex-direction: column;
+    margin-bottom: 0;
+    max-height: 90vh;
+    overflow-y: scroll;
+    padding: 5px;
+    padding-left: var(--bs-gutter-x,.75rem);;
+    padding-right: var(--bs-gutter-x,.75rem);;
+}
+
+pre, code {
+    white-space: pre-line;
+}

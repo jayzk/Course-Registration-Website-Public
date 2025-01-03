@@ -1,0 +1,51 @@
+﻿@inherits LayoutComponentBase
+@inject ICourseState CourseState
+@inject IJSRuntime JS
+@using Blazored.Toast.Configuration
+
+<PageTitle>Schedule Builder</PageTitle>
+
+<!-- This should make the icon in the tab the logo but it just dosent so lol IDK -->
+<link rel="icon" href="./wwwroot/CoursEZLogo.png">
+
+<BlazoredToasts Position="ToastPosition.TopCenter"
+                ShowProgressBar="true"/>
+
+<div>
+    <!-- Container for the header bar -->
+    <div class=" navbar navbar-dark header-custom">
+        <HeaderBar currentPage="@currentPage" />
+    </div>
+
+    @Body
+
+</div>
+
+
+@code {
+
+
+    //finds the current page you are on (currently used in headerbar to determine current page)
+    public Type? currentPage { get; set; }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+        await JS.InvokeVoidAsync("tooltipInit");
+        await JS.InvokeVoidAsync("popoverInit");
+    }
+
+    protected override void OnInitialized()
+    {
+        CourseState.SetCourses(CourseList.GetMap());
+
+        CourseState.selectedCourses.Add(CourseList.GetCourse("CPSC 481")); //pre-load enrolled courses
+    }
+
+    protected override void OnParametersSet(){
+
+        currentPage = (this.Body.Target as RouteView)?.RouteData.PageType;
+
+        //Console.WriteLine("current page: " + currentPage);
+    }
+}

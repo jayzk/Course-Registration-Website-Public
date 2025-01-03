@@ -1,0 +1,199 @@
+﻿@inject ICourseState CourseState
+@implements IDisposable
+
+@switch (SetCourseTime.ID)
+{
+    case 1: @* SENG 300 *@
+        <div class="form-check form-check-inline" style=" margin: 0pt">
+            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" @oninput="OnCheck1"
+                   checked="@CourseState.Courses[SetCourseTime.Number].checkedTime1">
+            <label class="form-check-label" for="inlineCheckbox1">
+                <strong id="section-selected"> Lec 01 Tut 01 </strong><br />
+                <span id="section-times">
+                    Lec: MWF 10:00am-10:50am <br />
+                    Tut: Tu &nbsp&nbsp 9:00am-10:50am
+                </span>
+            </label>
+        </div>
+
+        @* Display buttons *@
+        <li class="list-group-item d-flex justify-content-between align-items-center" style="border: none">
+            <button type="button" class="btn btn-secondary" @onclick="OnSelectAll">Select All</button>
+            <button type="button" class="btn btn-secondary" @onclick="OnSelectNone">Select None</button>
+        </li>
+        break;
+    case 2: @* ASPH 305 *@
+        <div class="form-check form-check-inline" style=" margin: 0pt">
+            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" @oninput="OnCheck1"
+                   checked="@CourseState.Courses[SetCourseTime.Number].checkedTime1">
+            <label class="form-check-label" for="inlineCheckbox1">
+                <strong id="section-selected"> Lec 01 Tut 01 </strong><br />
+                <span id="section-times">
+                    Lec: TuTh 12:00pm-2:50pm <br />
+                    Tut: F &nbsp&nbsp 5:00pm-6:50pm
+                </span>
+            </label>
+        </div>
+
+        @* Display buttons *@
+        <li class="list-group-item d-flex justify-content-between align-items-center" style="border: none">
+            <button type="button" class="btn btn-secondary" @onclick="OnSelectAll">Select All</button>
+            <button type="button" class="btn btn-secondary" @onclick="OnSelectNone">Select None</button>
+        </li>
+        break;
+    case 3: @* CPSC 449 *@
+        <div class="form-check form-check-inline" style=" margin: 0pt">
+            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" @oninput="OnCheck1"
+                   checked="@CourseState.Courses[SetCourseTime.Number].checkedTime1">
+            <label class="form-check-label" for="inlineCheckbox1">
+                <strong id="section-selected"> Lec 01 Tut 01 </strong><br />
+                <span id="section-times">
+                    Lec: MWF 12:00pm-12:50pm <br />
+                    Tut: Th &nbsp&nbsp&nbsp 9:00am-12:50pm
+                </span>
+            </label>
+        </div>
+        <div class="form-check form-check-inline" style=" margin: 0pt">
+            <input class="form-check-input" type="checkbox" id="inlineCheckbox2" @oninput="OnCheck2"
+                   checked="@CourseState.Courses[SetCourseTime.Number].checkedTime2">
+            <label class="form-check-label" for="inlineCheckbox2">
+                <strong id="section-unselected"> Lec 01 Tut 02 </strong><br />
+                <span id="section-times">
+                    Lec: MWF 12:00pm-12:50pm <br />
+                    Tut: W &nbsp&nbsp&nbsp 2:00pm-3:50pm
+                </span>
+            </label>
+        </div>   
+
+        @* Display buttons *@
+        <li class="list-group-item d-flex justify-content-between align-items-center" style="border: none">
+            <button type="button" class="btn btn-secondary" @onclick="OnSelectAll">Select All</button>
+            <button type="button" class="btn btn-secondary" @onclick="OnSelectNone">Select None</button>
+        </li>
+        break;
+    case 4: @* CPSC 481 *@
+        <div class="form-check form-check-inline" style=" margin: 0pt">
+            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" @oninput="OnCheck1" 
+                   checked="@CourseState.Courses[SetCourseTime.Number].checkedTime1">
+            <label class="form-check-label" for="inlineCheckbox1">
+                <strong id="section-selected"> Lec 01 Tut 01 </strong><br />
+                <span id="section-times">
+                    Lec: MWF 10:00am-10:50am <br />
+                    Tut: Tu &nbsp&nbsp 9:00am-10:50am
+                </span>
+            </label>
+        </div>
+
+        @* Display buttons *@
+        <li class="list-group-item d-flex justify-content-between align-items-center" style="border: none">
+            <button type="button" class="btn btn-secondary" @onclick="OnSelectAll">Select All</button>
+            <button type="button" class="btn btn-secondary" @onclick="OnSelectNone">Select None</button>
+        </li>
+        break;
+    case 5: @* CPSC 399 *@
+        <div class="form-check form-check-inline" style=" margin: 0pt">
+            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" @oninput="OnCheck1"
+                   checked="@CourseState.Courses[SetCourseTime.Number].checkedTime1">
+            <label class="form-check-label" for="inlineCheckbox1">
+                <strong id="section-selected"> Lec 01 </strong><br />
+                <span id="section-times">
+                    Lec: MWF 10:00am-10:50am <br />
+                </span>
+            </label>
+        </div>
+
+        @* Display buttons *@
+        <li class="list-group-item d-flex justify-content-between align-items-center" style="border: none">
+            <button type="button" class="btn btn-secondary" @onclick="OnSelectAll">Select All</button>
+            <button type="button" class="btn btn-secondary" @onclick="OnSelectNone">Select None</button>
+        </li>
+        break;
+    case 6: @* GEOG 280 *@
+        <div class="form-check form-check-inline" style=" margin: 0pt">
+            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" @oninput="OnCheck1"
+                   checked="@CourseState.Courses[SetCourseTime.Number].checkedTime1">
+            <label class="form-check-label" for="inlineCheckbox1">
+                <strong id="section-selected"> Lec 01 Tut 01 </strong><br />
+                <span id="section-times">
+                    Lec: TuTh 4:00pm-5:50pm <br />
+                    Tut: M &nbsp&nbsp&nbsp 4:00pm-4:50pm
+                </span>
+            </label>
+        </div>
+
+        @* Display buttons *@
+        <li class="list-group-item d-flex justify-content-between align-items-center" style="border: none">
+            <button type="button" class="btn btn-secondary" @onclick="OnSelectAll">Select All</button>
+            <button type="button" class="btn btn-secondary" @onclick="OnSelectNone">Select None</button>
+        </li>
+        break;
+    case 7: @* ASTR 209 *@
+        <div class="form-check form-check-inline" style=" margin: 0pt">
+            <input class="form-check-input" type="checkbox" id="inlineCheckbox1" @oninput="OnCheck1"
+                   checked="@CourseState.Courses[SetCourseTime.Number].checkedTime1">
+            <label class="form-check-label" for="inlineCheckbox1">
+                <strong id="section-selected"> Lec 01 </strong><br />
+                <span id="section-times">
+                    Lec: MWF 1:00pm - 1:50pm <br />
+                </span>
+            </label>
+        </div>
+
+        @* Display buttons *@
+        <li class="list-group-item d-flex justify-content-between align-items-center" style="border: none">
+            <button type="button" class="btn btn-secondary" @onclick="OnSelectAll">Select All</button>
+            <button type="button" class="btn btn-secondary" @onclick="OnSelectNone">Select None</button>
+        </li>
+        break;
+}
+
+@code {
+    [Parameter]
+    public int? ID { get; set; }
+
+    [Parameter]
+    public CourseData? SetCourseTime { get; set; }
+
+    private bool isChecked1 = true;
+    private bool isChecked2 = true;
+
+    protected override void OnInitialized()
+    {
+        CourseState.OnCourseStateChanged += StateHasChanged;
+    }
+
+    // Ensure that there are no memory leaks
+    public void Dispose()
+    {
+        CourseState.OnCourseStateChanged -= StateHasChanged;
+    }
+
+    private void OnCheck1()
+    {
+        CourseState.Courses[SetCourseTime.Number].checkedTime1 = !CourseState.Courses[SetCourseTime.Number].checkedTime1;
+        CourseState.Courses[SetCourseTime.Number].isFirstTime = CourseState.Courses[SetCourseTime.Number].checkedTime1;
+        CourseState.ForceUpdate();
+    }
+
+    private void OnCheck2()
+    {
+        CourseState.Courses[SetCourseTime.Number].checkedTime2 = !CourseState.Courses[SetCourseTime.Number].checkedTime2;
+        CourseState.ForceUpdate();
+    }
+
+    private void OnSelectAll()
+    {
+        CourseState.Courses[SetCourseTime.Number].checkedTime1 = true;
+        CourseState.Courses[SetCourseTime.Number].checkedTime2 = true;
+        CourseState.Courses[SetCourseTime.Number].isFirstTime = CourseState.Courses[SetCourseTime.Number].checkedTime1;
+        CourseState.ForceUpdate();
+    }
+
+    private void OnSelectNone()
+    {
+        CourseState.Courses[SetCourseTime.Number].checkedTime1 = false;
+        CourseState.Courses[SetCourseTime.Number].checkedTime2 = false;
+        CourseState.Courses[SetCourseTime.Number].isFirstTime = CourseState.Courses[SetCourseTime.Number].checkedTime1;
+        CourseState.ForceUpdate();
+    }
+}

@@ -1,0 +1,38 @@
+﻿
+<!-- Container for the sidebar header and it's hidden contents -->
+<div class="d-flex" id="wrapper-collapsibleBar">
+    <!-- Header for the collapsible sidebar -->
+    <div class="d-flex flex-column" id="sidebarHeader">
+        <button @onclick="() => UpdateArrow()" id="collapseButton" class="btn btn-primary float-start" data-bs-toggle="collapse" data-bs-target="#wrapper-hiddenBar"
+        aria-expanded="false" aria-controls="wrapper-hiddenBar"> @arrow </button>
+
+        <span id="sidebarTitle">
+            <!-- If add reccomened: Dynamically change based on courses -->
+            Required and Recommended Courses
+        </span>
+    </div>
+
+
+    <div class="collapse collapse-horizontal" id="wrapper-hiddenBar">
+        <RecommendedSidebar/>
+    </div>
+</div>
+
+@code {
+    private string arrow;
+
+    protected override void OnInitialized()
+    {
+        arrow = "<<";
+    }
+
+    private void UpdateArrow()
+    {
+        if(arrow == "<<"){
+            arrow = ">>";
+        }
+        else if(arrow == ">>"){
+            arrow = "<<";
+        }
+    }
+}

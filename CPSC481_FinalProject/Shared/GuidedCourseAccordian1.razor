@@ -1,0 +1,631 @@
+﻿@using CPSC481_FinalProject.Shared
+@inject ICourseState CourseState
+@inject IToastService toastService
+
+@if (SetCourse.IsVisible == true)
+{
+    <div class="accordion" id="@("accordionPanel"+SetCourse.ID)">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="@("headingOne"+SetCourse.ID)" style="position: relative;">
+                <button class="accordion-button collapsed" style="background-color: @SetCourse.Color"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="@("#collapseOne"+SetCourse.ID)"
+                        aria-expanded="true"
+                        aria-controls="@("collapseOne"+SetCourse.ID)">
+
+                    @* Display Course number *@
+                    <strong> @SetCourse.Number </strong>
+
+                    @* Display course status *@
+                    @switch (SetCourse.Status)
+                    {
+                        case 1:
+                            <span class="badge rounded-pill bg-primary mx-2" style="font-size: 7pt">ENROLLING</span>
+                            break;
+                        case 2:
+                            <span class="badge rounded-pill bg-warning text-dark mx-2" style="font-size: 7pt">WAITLISTED</span>
+                            break;
+                        case 3:
+                            <span class="badge rounded-pill bg-success mx-2" style="font-size: 7pt">ENROLLED</span>
+                            break;
+                        case 4:
+                            <span class="badge rounded-pill bg-danger mx-2" style="font-size: 7pt">DROPPING</span>
+                            break;
+                    }
+                </button>
+
+                @* Display Trash/cancel Icon *@
+                @if (SetCourse.Status != 1) @* Display trash icon *@
+                {
+                    <button type="button" class="btn btn-img" @onclick="() => CourseState.DropEnrolledCourse(SetCourse.Number)"
+                            style="position: absolute; top: 20%; right: 13%; z-index: 5; object-fit: cover; padding: 0; padding-right: 5px;"
+                            title="Drop course">
+                        <span class="material-symbols-outlined" style="color: rgb(180, 23, 23)">
+                            delete
+                        </span>
+                    </button>
+
+                    @* Display bookmark icon *@
+                    @if (SetCourse.IsBookmarked == false)
+                    {
+                        <button type="button" class="btn btn-img" @onclick="@(() => AddBookmarkEvent.InvokeAsync(SetCourse))"
+                                style="position: absolute; top: 20%; right: 22%; z-index: 5; object-fit: cover; padding: 0; padding-right: 5px;"
+                                title="Bookmark course">
+                            <span class="material-symbols-outlined">
+                                bookmark_add
+                            </span>
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-img" @onclick="@(() => RemoveBookmarkEvent.InvokeAsync(SetCourse))"
+                                style="position: absolute; top: 20%; right: 22%; z-index: 5; object-fit: cover; padding: 0; padding-right: 5px;"
+                                title="Unbookmark course">
+                            <span class="material-symbols-outlined" id="filled">
+                                bookmark
+                            </span>
+                        </button>
+                    }
+                    <!--
+
+                    @* Display visibility icon *@
+                    <button type="button" class="btn btn-img" @onclick="() => CourseState.HideCourse(SetCourse.Number)"
+                            style="position: absolute; top: 10%; right: 27%; z-index: 5; object-fit: cover; max-width: 12%; max-height: 12%;">
+                        <span class="material-symbols-outlined">
+                            visibility
+                        </span>
+                    </button>
+                    -->
+                }
+                else
+                {
+                    @* Display remove icon *@
+                    <button type="button" class="btn btn-img" @onclick="() => CourseState.RemoveCourse(SetCourse)"
+                            style="position: absolute; top: -20%; right: 96%; z-index: 5; object-fit: cover; max-width: 9%; max-height: 9%;">
+                        <span class="material-symbols-outlined" style="color: rgb(180, 23, 23)">
+                            cancel
+                        </span>
+                    </button>
+
+                    @* Display bookmark icon *@
+                    @if (SetCourse.IsBookmarked == false)
+                    {
+                        <button type="button" class="btn btn-img" @onclick="@(() => AddBookmarkEvent.InvokeAsync(SetCourse))"
+                                style="position: absolute; top: 20%; right: 13%; z-index: 5; object-fit: cover; padding: 0; padding-right: 5px;"
+                                title="Bookmark course">
+                            <span class="material-symbols-outlined">
+                                bookmark_add
+                            </span>
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-img" @onclick="@(() => RemoveBookmarkEvent.InvokeAsync(SetCourse))"
+                                style="position: absolute; top: 20%; right: 13%; z-index: 5; object-fit: cover; padding: 0; padding-right: 5px;"
+                                title="Unbookmark course">
+                            <span class="material-symbols-outlined" id="filled">
+                                bookmark
+                            </span>
+                        </button>
+                    }
+
+                    <!--
+                    @* Display visibility icon *@
+                    <button type="button" class="btn btn-img" @onclick="() => CourseState.HideCourse(SetCourse.Number)"
+                            style="position: absolute; top: 10%; right: 20%; z-index: 5; object-fit: cover; max-width: 12%; max-height: 12%;">
+                        <span class="material-symbols-outlined">
+                            visibility
+                        </span>
+                    </button>
+                    -->
+                }
+            </h2>
+            <div id="@("collapseOne"+SetCourse.ID)" class="accordion-collapse collapse" aria-labelledby="@("headingOne"+SetCourse.ID)">
+                @*TODO*@
+                <div class="accordion-body">
+                    @*HTML FOR COURSE DESCRIPTION DROPDOWN*@
+                    <div class="course-description" style="font-size: 16px;">
+                        @* Display course title *@
+                        @SetCourse.Title
+
+                        <hr />
+
+                        @* Display course status *@
+                        @switch (SetCourse.Status)
+                        {
+                            case 1:
+                                <span class="badge rounded-pill bg-primary" style="font-size: 7pt">ENROLLING</span>
+                                <br/>
+                                break;
+                            case 2:
+                                <span class="badge rounded-pill bg-warning text-dark" style="font-size: 7pt">WAITLISTED</span>
+                                <br />
+                                break;
+                            case 3:
+                                <span class="badge rounded-pill bg-success" style="font-size: 7pt">ENROLLED</span>
+                                <br />
+                                break;
+                            case 4:
+                                <span class="badge rounded-pill bg-danger" style="font-size: 7pt">DROPPING</span>
+                                <br />
+                                break;
+                        }
+                        <strong>Lecture Section:</strong> LEC 01
+
+                        @* Display seats and waitlist for lecture *@
+                        <div id="seats-waitlist">
+                            <ul class="list-group">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <p><strong>Seats:</strong> @SetCourse.Seats</p>
+                                    <p><strong>Waitlist:</strong> @SetCourse.Waitlist</p>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <br />
+
+                        @* Display course status *@
+                        @switch (SetCourse.Status)
+                        {
+                            case 1:
+                                <span class="badge rounded-pill bg-primary" style="font-size: 7pt">ENROLLING</span>
+                                <br />
+                                break;
+                            case 2:
+                                <span class="badge rounded-pill bg-warning text-dark" style="font-size: 7pt">WAITLISTED</span>
+                                <br />
+                                break;
+                            case 3:
+                                <span class="badge rounded-pill bg-success" style="font-size: 7pt">ENROLLED</span>
+                                <br />
+                                break;
+                            case 4:
+                                <span class="badge rounded-pill bg-danger" style="font-size: 7pt">DROPPING</span>
+                                <br />
+                                break;
+                        }
+
+                        @if (SetCourse.checkedTime1 == true && SetCourse.isFirstTime == true)
+                        {
+                            <strong>Tutorial Section:</strong> <a>TUT T01</a>
+
+                            @* Display seats and waitlist for tutorial *@
+                            <div id="seats-waitlist">
+                                <ul class="list-group">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <p><strong>Seats:</strong> @SetCourse.TutSeats</p>
+                                        <p><strong>Waitlist:</strong> @SetCourse.TutWaitlist</p>
+                                    </li>
+                                </ul>
+                            </div>
+                        }
+                        else if (SetCourse.checkedTime2 == true && SetCourse.isFirstTime == false)
+                        {
+                            <strong>Tutorial Section:</strong> <a>TUT T02</a>
+
+                            @* Display seats and waitlist for tutorial *@
+                            <div id="seats-waitlist">
+                                <ul class="list-group">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <p><strong>Seats:</strong> @SetCourse.TutSeats</p>
+                                        <p><strong>Waitlist:</strong> @SetCourse.TutWaitlist</p>
+                                    </li>
+                                </ul>
+                            </div>
+                        }
+                        else
+                        {
+                            <strong>Tutorial Section:</strong> <a>N/A</a>
+
+                            @* Display seats and waitlist for tutorial *@
+                            <div id="seats-waitlist">
+                                <ul class="list-group">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <p><strong>Seats:</strong> N/A</p>
+                                        <p><strong>Waitlist:</strong> N/A</p>
+                                    </li>
+                                </ul>
+                            </div>
+                        }
+
+                        @* Display Professor and location *@
+                        <span style="font-size: 12px;">
+                            <strong>Professor:</strong> @SetCourse.Professor <br />
+                            <strong>Location:</strong> @SetCourse.Location
+                        </span>
+                        <hr />
+
+                        @* Display course description *@
+                        <p style="font-size: 12px;"><strong>Course Description:</strong> @SetCourse.Description </p>
+
+                        @* Display course prereqs *@
+                        <p style="font-size: 12px;">
+                            <strong>Prerequisite(s)</strong><em> (click to add to schedule):</em> <br>
+                            @if (SetCourse.Prereq == null)
+                            {
+                                <a> N/A </a>
+                            }
+                            else
+                            {
+                                <a href="" @onclick="() => CourseState.AddCourse(SetCourse.Prereq)" @onclick:preventDefault>
+                                    @SetCourse.Prereq.Number
+                                </a>
+                            }
+                        </p>
+
+                        @* Display course anti-reqs *@
+                        <p style="font-size: 12px;" id="no-space-after-paragraph">
+                            <strong>Antirequisite(s)</strong><em> (click to add to schedule):</em><br> @*LOOK AT THIS LATER*@
+                            @if (SetCourse.Antireq == null)
+                            {
+                                <a> N/A </a>
+                            }
+                            else
+                            {
+                                <a href="" @onclick="() => CourseState.AddCourse(SetCourse.Antireq)" @onclick:preventDefault>
+                                    @SetCourse.Antireq.Number
+                                </a>
+                            }
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="@("headingTwo"+SetCourse.ID)">
+                <button class="accordion-button collapsed"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="@("#collapseTwo"+SetCourse.ID)"
+                        aria-expanded="true"
+                        aria-controls="@("collapseTwo"+SetCourse.ID)">
+                    Lecture/Tutorial Times
+                </button>
+            </h2>
+            <div id="@("collapseTwo"+SetCourse.ID)" class="accordion-collapse collapse" aria-labelledby="@("headingTwo"+SetCourse.ID)">
+                @*TODO (KEEP TRACK OF ARIA LABELLED BY)*@
+                <div class="accordion-body">
+                    @*HTML FOR LECTURE/TUTORIAL TIMES DROPDOWN*@
+                    <div class="times-description" style="font-size: 12px">
+                        @* Display course and lecturn times *@
+                        <CourseTimes ID="SetCourse.ID"></CourseTimes>
+
+                        @* Display buttons *@
+                        <li class="list-group-item d-flex justify-content-between align-items-center" style="border: none">
+                            <button type="button" class="btn btn-secondary">Select All</button>
+                            <button type="button" class="btn btn-secondary">Select None</button>
+                        </li>
+                    </div>
+                </div>
+            </div>
+        </div>-->
+    </div>
+}
+else
+{
+    <div class="accordion" id="@("accordionPanel"+SetCourse.ID)">
+        <div class="accordion-item">
+            <h2 class="accordion-header" id="@("headingOne"+SetCourse.ID)" style="position: relative;">
+                <button class="accordion-button collapsed" style="background-color: #bababa"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="@("#collapseOne"+SetCourse.ID)"
+                        aria-expanded="true"
+                        aria-controls="@("collapseOne"+SetCourse.ID)">
+
+                    @* Display Course number *@
+                    <strong> @SetCourse.Number </strong>
+
+                    @* Display course status if needed *@
+                    @switch (SetCourse.Status)
+                    {
+                        case 2:
+                            <span class="badge rounded-pill bg-warning text-dark mx-2" style="font-size: 7pt">WAITLISTED</span>
+                            break;
+                        case 3:
+                            <span class="badge rounded-pill bg-success mx-2" style="font-size: 7pt">ENROLLED</span>
+                            break;
+                        case 4:
+                            <span class="badge rounded-pill bg-danger mx-2" style="font-size: 7pt">DROPPING</span>
+                            break;
+                    }
+                </button>
+
+                @* Display Trash/cancel Icon *@
+                @if (SetCourse.Status == 2 || SetCourse.Status == 3) @* Display all 3 icons *@
+                {
+                    <!--
+                    <button type="button" class="btn btn-img" @onclick="() => CourseState.ShowCourse(SetCourse.Number)"
+                            style="position: absolute; top: 20%; right: 31%; z-index: 5; object-fit: cover; padding: 0; padding-right: 5px;"
+                            title="Show course">
+                        <span class="material-symbols-outlined">
+                            visibility_off
+                        </span>
+                    </button>-->
+
+                    @* Display bookmark icon *@
+                    @if (SetCourse.IsBookmarked == false)
+                    {
+                        <button type="button" class="btn btn-img" @onclick="@(() => AddBookmarkEvent.InvokeAsync(SetCourse))"
+                                style="position: absolute; top: 20%; right: 22%; z-index: 5; object-fit: cover; padding: 0; padding-right: 5px;"
+                                title="Bookmark course">
+                            <span class="material-symbols-outlined">
+                                bookmark_add
+                            </span>
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-img" @onclick="@(() => RemoveBookmarkEvent.InvokeAsync(SetCourse))"
+                                style="position: absolute; top: 20%; right: 22%; z-index: 5; object-fit: cover; padding: 0; padding-right: 5px;"
+                                title="Unbookmark course">
+                            <span class="material-symbols-outlined" id="filled">
+                                bookmark
+                            </span>
+                        </button>
+                    }
+
+                    <button type="button" class="btn btn-img" @onclick="() => CourseState.ReAddEnrolledCourse(SetCourse.Number)"
+                            style="position: absolute; top: 20%; right: 13%; z-index: 5; object-fit: cover; padding: 0; padding-right: 5px;"
+                            title="Drop course">
+                        <span class="material-symbols-outlined" style="color: rgb(180, 23, 23)">
+                            delete
+                        </span>
+                    </button>
+                }
+                else if (SetCourse.Status == 1)
+                {
+                    @* Display remove icon *@
+                    <button type="button" class="btn btn-img" @onclick="() => CourseState.RemoveCourse(SetCourse)"
+                            style="position: absolute; top: -20%; right: 96%; z-index: 5; object-fit: cover; max-width: 9%; max-height: 9%;">
+                        <span class="material-symbols-outlined" style="color: rgb(180, 23, 23)">
+                            cancel
+                        </span>
+                    </button>
+
+                    <!--
+                    <button type="button" class="btn btn-img" @onclick="() => CourseState.ShowCourse(SetCourse.Number)"
+                            style="position: absolute; top: 20%; right: 22%; z-index: 5; object-fit: cover; padding: 0; padding-right: 5px;"
+                            title="Show course">
+                        <span class="material-symbols-outlined">
+                            visibility_off
+                        </span>
+                    </button> -->
+
+                    @if (SetCourse.IsBookmarked == false)
+                    {
+                        <button type="button" class="btn btn-img" @onclick="@(() => AddBookmarkEvent.InvokeAsync(SetCourse))"
+                                style="position: absolute; top: 20%; right: 13%; z-index: 5; object-fit: cover; padding: 0; padding-right: 5px;"
+                                title="Bookmark course">
+                            <span class="material-symbols-outlined">
+                                bookmark_add
+                            </span>
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-img" @onclick="@(() => RemoveBookmarkEvent.InvokeAsync(SetCourse))"
+                                style="position: absolute; top: 20%; right: 13%; z-index: 5; object-fit: cover; padding: 0; padding-right: 5px;"
+                                title="Unbookmark course">
+                            <span class="material-symbols-outlined" id="filled">
+                                bookmark
+                            </span>
+                        </button>
+                    }
+                }
+
+                else if (SetCourse.Status == 4)
+                {
+                    <!--
+                    <button type="button" class="btn btn-img" @onclick="() => CourseState.ShowCourse(SetCourse.Number)"
+                            style="position: absolute; top: 20%; right: 31%; z-index: 5; object-fit: cover; padding: 0; padding-right: 5px;"
+                            title="Show course">
+                        <span class="material-symbols-outlined">
+                            visibility_off
+                        </span>
+                    </button>-->
+
+                    @if (SetCourse.IsBookmarked == false)
+                    {
+                        <button type="button" class="btn btn-img" @onclick="@(() => AddBookmarkEvent.InvokeAsync(SetCourse))"
+                                style="position: absolute; top: 20%; right: 22%; z-index: 5; object-fit: cover; padding: 0; padding-right: 5px;"
+                                title="Bookmark course">
+                            <span class="material-symbols-outlined">
+                                bookmark_add
+                            </span>
+                        </button>
+                    }
+                    else
+                    {
+                        <button type="button" class="btn btn-img" @onclick="@(() => RemoveBookmarkEvent.InvokeAsync(SetCourse))"
+                                style="position: absolute; top: 20%; right: 22%; z-index: 5; object-fit: cover; padding: 0; padding-right: 5px;"
+                                title="Unbookmark course">
+                            <span class="material-symbols-outlined" id="filled">
+                                bookmark
+                            </span>
+                        </button>
+                    }
+
+                    <button type="button" class="btn btn-img" @onclick="() => CourseState.ReAddEnrolledCourse(SetCourse.Number)"
+                            style="position: absolute; top: 20%; right: 13%; z-index: 5; object-fit: cover; padding: 0; padding-right: 5px;"
+                            title="Stay enrolled">
+                        <span class="material-symbols-outlined" style="color: rgb(180, 23, 23)">
+                            restore_from_trash
+                        </span>
+                    </button>
+                }
+
+
+            </h2>
+            <div id="@("collapseOne"+SetCourse.ID)" class="accordion-collapse collapse" aria-labelledby="@("headingOne"+SetCourse.ID)">
+                @*TODO*@
+                <div class="accordion-body">
+                    @*HTML FOR COURSE DESCRIPTION DROPDOWN*@
+                    <div class="course-description" style="font-size: 16px;">
+                        @* Display course title *@
+                        @SetCourse.Title
+
+                        <hr />
+
+                        @* Display course status *@
+                        @switch (SetCourse.Status)
+                        {
+                            case 1:
+                                <span class="badge rounded-pill bg-primary" style="font-size: 7pt">ENROLLING</span>
+                                <br />
+                                break;
+                            case 2:
+                                <span class="badge rounded-pill bg-warning text-dark" style="font-size: 7pt">WAITLISTED</span>
+                                <br />
+                                break;
+                            case 3:
+                                <span class="badge rounded-pill bg-success" style="font-size: 7pt">ENROLLED</span>
+                                <br />
+                                break;
+                            case 4:
+                                <span class="badge rounded-pill bg-danger" style="font-size: 7pt">DROPPING</span>
+                                <br />
+                                break;
+                        }
+                        <strong>Lecture Section:</strong> LEC 01
+
+                        @* Display seats and waitlist *@
+                        <div id="seats-waitlist">
+                            <ul class="list-group">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <p><strong>Seats:</strong> @SetCourse.Seats</p>
+                                    <p><strong>Waitlist:</strong> @SetCourse.Waitlist</p>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <br />
+
+                        @* Display course status *@
+                        @switch (SetCourse.Status)
+                        {
+                            case 1:
+                                <span class="badge rounded-pill bg-primary" style="font-size: 7pt">ENROLLING</span>
+                                <br />
+                                break;
+                            case 2:
+                                <span class="badge rounded-pill bg-warning text-dark" style="font-size: 7pt">WAITLISTED</span>
+                                <br />
+                                break;
+                            case 3:
+                                <span class="badge rounded-pill bg-success" style="font-size: 7pt">ENROLLED</span>
+                                <br />
+                                break;
+                            case 4:
+                                <span class="badge rounded-pill bg-danger" style="font-size: 7pt">DROPPING</span>
+                                <br />
+                                break;
+                        }
+
+                        @if (SetCourse.checkedTime1 == true && SetCourse.isFirstTime == true)
+                        {
+                            <strong>Tutorial Section:</strong> <a>TUT T01</a>
+
+                            @* Display seats and waitlist for tutorial *@
+                            <div id="seats-waitlist">
+                                <ul class="list-group">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <p><strong>Seats:</strong> @SetCourse.TutSeats</p>
+                                        <p><strong>Waitlist:</strong> @SetCourse.TutWaitlist</p>
+                                    </li>
+                                </ul>
+                            </div>
+                        }
+                        else if (SetCourse.checkedTime2 == true && SetCourse.isFirstTime == false)
+                        {
+                            <strong>Tutorial Section:</strong> <a>TUT T02</a>
+
+                            @* Display seats and waitlist for tutorial *@
+                            <div id="seats-waitlist">
+                                <ul class="list-group">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <p><strong>Seats:</strong> @SetCourse.TutSeats</p>
+                                        <p><strong>Waitlist:</strong> @SetCourse.TutWaitlist</p>
+                                    </li>
+                                </ul>
+                            </div>
+                        }
+                        else
+                        {
+                            <strong>Tutorial Section:</strong> <a>N/A</a>
+
+                            @* Display seats and waitlist for tutorial *@
+                            <div id="seats-waitlist">
+                                <ul class="list-group">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        <p><strong>Seats:</strong> N/A</p>
+                                        <p><strong>Waitlist:</strong> N/A</p>
+                                    </li>
+                                </ul>
+                            </div>
+                        }
+
+                        @* Display Professor and location *@
+                        <span style="font-size: 12px;">
+                            <strong>Professor:</strong> @SetCourse.Professor <br />
+                            <strong>Location:</strong> @SetCourse.Location
+                        </span>
+                        <hr />
+
+                        @* Display course description *@
+                        <p style="font-size: 12px;"><strong>Course Description:</strong> @SetCourse.Description </p>
+
+                        @* Display course prereqs *@
+                        <p style="font-size: 12px;">
+                            <strong>Prerequisite(s)</strong><em> (click to add to schedule):</em> <br>
+                            @if (SetCourse.Prereq == null)
+                            {
+                                <a> N/A </a>
+                            }
+                            else
+                            {
+                                <a href="" @onclick="() => CourseState.AddCourse(SetCourse.Prereq)" @onclick:preventDefault>
+                                    @SetCourse.Prereq.Number
+                                </a>
+                            }
+                        </p>
+
+                        @* Display course anti-reqs *@
+                        <p style="font-size: 12px;" id="no-space-after-paragraph">
+                            <strong>Antirequisite(s)</strong><em> (click to add to schedule):</em><br> @*LOOK AT THIS LATER*@
+                            @if (SetCourse.Antireq == null)
+                            {
+                                <a> N/A </a>
+                            }
+                            else
+                            {
+                                <a href="" @onclick="() => CourseState.AddCourse(SetCourse.Antireq)" @onclick:preventDefault>
+                                    @SetCourse.Antireq.Number
+                                </a>
+                            }
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public CourseData? SetCourse { get; set; }
+
+    [Parameter]
+    public EventCallback<CourseData> AddBookmarkEvent { get; set; }
+
+    [Parameter]
+    public EventCallback<CourseData> RemoveBookmarkEvent { get; set; }
+
+    private void OnRemoveCourse()
+    {
+        CourseState.RemoveCourse(SetCourse);
+        //toastService.ShowInfo("Removed " + SetCourse.Number);
+    }
+}

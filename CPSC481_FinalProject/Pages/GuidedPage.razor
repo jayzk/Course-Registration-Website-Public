@@ -1,0 +1,299 @@
+﻿@page "/guided"
+
+@inject ICourseState CourseState 
+@implements IDisposable
+@inject ITermState termState
+@inject IToastService toastService
+
+
+<!-- Container below the header bar -->
+<div class="h-flex">
+    <!-- Step Buttons -->
+    <div class="d-flex justify-content-center" style="padding-top: 10px; padding-bottom: 10px; background-color: rgba(128, 128, 128, 0.2); ">
+        <div class="container">
+            <div class="d-flex justify-content-center">
+                <ul class="list-unstyled d-flex mb-0">
+                    <li class="step">
+                        <div class="d-flex flex-column align-items-center">
+                            <NavLink href="guided">
+                                <button type="button" class="btn btn-primary btn-circle btn-xl">1</button>
+                            </NavLink>
+                            <span class="mt-2">Select Courses</span>
+                        </div>
+                    </li>
+                    <li class="step mx-5 d-flex align-items-center">
+                        <div class="line bg-secondary"></div>
+                        <div class="d-flex flex-column align-items-center">
+                            @if (ShouldShowAntireq())
+                            {
+                                <button type="button" class="btn btn-secondary btn-circle btn-xl" data-bs-toggle="modal" 
+                                        data-bs-target="#AntiRequisiteModal">
+                                    2
+                                </button>
+                            }
+                            else if (ShouldShowEmpty())
+                            {
+                                <button type="button" class="btn btn-secondary btn-circle btn-xl" data-bs-toggle="modal"
+                                        data-bs-target="#EmptyModal">
+                                    2
+                                </button>
+                            }
+                            else
+                            {
+                                <NavLink href="guided2">
+                                    <button type="button" class="btn btn-secondary btn-circle btn-xl"> 2 </button>
+                                </NavLink>
+                            }
+                            <span class="mt-2">Select Schedule</span>
+                        </div>
+                    </li>
+                    <li class="step d-flex align-items-center">
+                        <div class="line bg-secondary"></div>
+                        <div class="d-flex flex-column align-items-center">
+                            @if (termState.getTermState() == "Winter 2023")
+                            {
+                                <button type="button" class="btn btn-secondary btn-circle btn-xl" @onclick="NotifyStepError"> 3 </button>
+                            }
+                            else if (termState.getTermState() == "Fall 2023")
+                            {
+                                <button type="button" class="btn btn-secondary btn-circle btn-xl" @onclick="NotifyStepError"> 3 </button>
+                            }
+                            <span class="mt-2">Get Schedule</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <!-- Course Selection Container-->
+    <div class="container" style="width: fit-content " >
+        <div class="row" style="width: fit-content">
+            <div class="col-12">
+                <div class="centered-container">
+                    <div class="rounded-box">
+                        <div class="content-container">
+                            <div class="d-flex" style=" background-color: #e9ecef;">
+                                <div id="wrapper-hiddenBar" class="recommended-sidebar-wrapper">
+                                    <div class="recommended-sidebar-container">
+                                        <RecommendedSidebar />
+                                    </div>
+                                </div>
+                                <div class="search-sidebar-wrapper">
+                                    <div class="search-wrapper">
+                                        <GuidedSearchSidebar1/>
+                                    </div>
+                                    <div style="position: relative; left: 90px; top: 60px; width: max-content">
+                                        @if (ShouldShowAntireq())
+                                        {
+                                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#AntiRequisiteModal">
+                                                Select Schedule
+                                            </button>
+                                        }
+                                        else if (ShouldShowEmpty())
+                                        {
+                                            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#EmptyModal">
+                                                Select Schedule
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            <NavLink href="guided2">
+                                                <button class="btn btn-success" >Select Schedule</button>
+                                            </NavLink>
+                                        }
+
+                                        <!-- Antireq Modal -->
+                                        <div class="modal fade" id="AntiRequisiteModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal" tabindex="-1" role="dialog"></div>
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title " id="exampleModalLabel">Error</h5>
+                                                        <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+
+                                                    <div class="modal-body">
+                                                        <div class="flex-container">
+                                                            <label>
+                                                                Antirequisite Conflict, the following courses are incompatible:
+                                                            </label>
+                                                            <label>
+                                                            &nbsp - ASPH 305 has the antirequisite ASTR 209 
+                                                            </label><br /><br />
+                                                            <label>
+                                                                <em> To resolve this, remove one of the incompatible courses. </em>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                                                        <NavLink href="guided2">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Continue Anyways</button>
+                                                        </NavLink>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Empty List Modal -->
+                                        <div class="modal fade" id="EmptyModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal" tabindex="-1" role="dialog"></div>
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title " id="exampleModalLabel">Error</h5>
+                                                        <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+
+                                                    <div class="modal-body">
+                                                        <div class="flex-container">
+                                                            <label>
+                                                                You have no courses added, to add courses:
+                                                            </label><br />
+                                                            <label>
+                                                                - Use the Course Search bar to browse courses
+                                                            </label>
+                                                            <label>
+                                                                - Add courses directly from your Degree Requirements
+                                                            </label>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .btn-circle.btn-xl {
+        width: 50px;
+        height: 50px;
+        padding: 13px 18px;
+        border-radius: 60px;
+        font-size: 15px;
+        text-align: center;
+    }
+
+    .line {
+        height: 4px;
+        width: 100px;
+        margin-right: -10px;
+        margin-left: -60px;
+        margin-top: -30px;
+        z-index: -1;
+        position: relative;
+    }
+
+    .rounded-box {
+        margin-top: 10px;
+        border: 0px solid black;
+        border-radius: 10px;
+        border-width: 1px;
+        background-color: white;
+        padding: 0;
+        display: inline-flex;
+        max-height: 75vh;
+        min-height: 75vh;
+        /*height: 500px; /* Fixed height */
+        overflow: hidden;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 1);
+    }
+
+    .content-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+    .search-sidebar-wrapper {
+        min-height: 100vh;
+        /*background-color: black;*/
+        overflow: auto;
+    }
+    .recommended-sidebar-wrapper {
+        height: fit-content;
+        border-right: 5px solid #ccc; /* Seperation between recommened and Course Search*/
+        overflow: auto;
+    }
+    #wrapper-hiddenBar {
+        background-color: #e9ecef;
+        flex-direction: column;
+        margin-bottom: 0;
+        max-height: 75vh;
+        overflow-y: scroll;
+        padding: 0px;
+    }
+
+    .centered-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+      width: 100%;
+    }
+
+    .green-button-wrapper {
+        padding-left: 10px; /* Add left padding of 10px to separate the green button */
+        overflow: auto;
+    }
+
+    .search-wrapper{
+        height: 60vh;
+        border-right: none;
+    }
+
+
+</style>
+
+
+
+@code {
+    private bool ShouldShowAntireq(){
+        return CourseState.Courses["ASPH 305"] != null && CourseState.selectedCourses.Contains(CourseList.GetCourse("ASPH 305")) &&
+               CourseState.Courses["ASTR 209"] != null && CourseState.selectedCourses.Contains(CourseList.GetCourse("ASTR 209"));
+    }
+
+    private bool ShouldShowEmpty()
+    {
+        return CourseState.selectedCourses.Count() == 0;
+    }
+
+    protected override void OnInitialized()
+    {
+        CourseState.OnCourseStateChanged += OnCourseStateChanged;
+    }
+
+    private void OnCourseStateChanged()
+    {
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        CourseState.OnCourseStateChanged -= OnCourseStateChanged;
+    }
+
+    private void NotifyStepError()
+    {
+        toastService.ShowError("Proceed to step 2 first");
+    }
+
+    private void NotifyEnrollmentDateError()
+    {
+        toastService.ShowError("To get schedule in the term Fall 2023 wait until your enrollment date of May 7th 10:30");
+    }
+}

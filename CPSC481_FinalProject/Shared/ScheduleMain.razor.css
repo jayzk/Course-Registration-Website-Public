@@ -1,0 +1,200 @@
+﻿@font-face {
+    font-family: 'SourceSansRegular';
+    src: url('../Fonts/SourceSansPro/SourceSansPro-Regular.ttf');
+}
+
+@font-face {
+    font-family: 'SourceSansBold';
+    src: url('../Fonts/SourceSansPro/SourceSansPro-Semibold.ttf');
+}
+
+@font-face {
+    font-family: 'SourceSansLight';
+    src: url('../Fonts/SourceSansPro/SourceSansPro-Light.ttf');
+}
+
+
+.table_container {
+    padding-left: 40px;
+    overflow: hidden;
+}
+
+.busy_block {
+    display: block;
+    position: absolute;
+    text-align: center;
+    background: black;
+    opacity: 0.5;
+}
+
+.timetable table {
+    table-layout: fixed;
+    width: 100%;
+}
+
+    .timetable table tr.odd, .timetable table tr.even {
+        /* background colour */
+        background-color: #f7f7f7;
+    }
+
+    .timetable table tr td {
+        border-right: 1px solid #E0E0E0;
+        border-bottom: 1px solid #E0E0E0;
+        width: 12%;
+        height: 18px;
+        text-align: center;
+        position: relative;
+        box-sizing: border-box;
+    }
+
+    .timetable table tr.tall td {
+        font-weight: bold;
+        font-size: 11px;
+        height: 22px;
+        background-color: #495057;
+        color: white;
+    }
+
+    .timetable table tr:first-child td {
+        border-top: 1px solid #E0E0E0;
+    }
+
+    .timetable table tr td:first-child {
+        border-left: 1px solid #E0E0E0;
+        position: relative;
+    }
+
+    .timetable table tr.header td {
+        border-top: none;
+        border-left: none;
+        border-right: none;
+    }
+
+        .timetable table tr.header td:first-child {
+            border-radius: 4px 0px 0px 0px;
+        }
+
+        .timetable table tr.header td:last-child {
+            border-radius: 0px 4px 0px 0px;
+        }
+
+.timetable tr.header td {
+    font-size: 10px;
+    background-color: #e0e0e0;
+    white-space: nowrap;
+    line-height: 1;
+    padding: 5px;
+}
+
+.timetable tr.odd td {
+    border-bottom-color: #c4c2c2;
+}
+
+.timetable tr.even td {
+    border-bottom-color: #e6e6e6;
+}
+
+.timetable tr.noborder td {
+    border-bottom-color: #FFFFFF;
+}
+
+.timetable .hour_marker {
+    position: absolute;
+    top: -6px;
+    right: 18px;
+    font-size: 80%;
+    margin-top: -3px;
+}
+
+.timetable .min_marker {
+    position: absolute;
+    top: -5px;
+    right: 2px;
+    font-size: 10px;
+    margin-top: -2px;
+}
+
+.timetable .left_fade {
+    position: absolute;
+    left: -41px;
+    top: -1px;
+    width: 40px;
+    height: 80px;
+    /*background-image:url('../images/grid_left.png');
+                    background-position: top right;*/
+}
+
+
+html {
+    overflow-y: scroll;
+}
+
+body {
+    font-weight: normal;
+    /*font-family: 'Open Sans', sans-serif;*/
+    /*font-family: 'Montserrat', sans-serif;*/
+    background-color: #FFFFFF;
+    margin: 0px;
+    padding: 0px;
+    line-height: initial;
+    height: 100%;
+}
+
+html, body, ul, ol {
+    font-size: 13px;
+}
+
+
+.time_block {
+    position: absolute;
+    text-align: center;
+    padding-top: 0px;
+    font-size: 10px;
+    padding: 2px 4px;
+    line-height: 90%;
+    opacity: 1;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 4px;
+    line-height: 1.1;
+}
+
+/* Found colors pastel colors here https://www.pinterest.ca/pin/720224165386723110/ */
+.bc0 {
+    background-color: #eeeeee;
+}
+
+.seng300 {
+    background-color: #d9b283;
+}
+
+.asph305 {
+    background-color: #deec8a;
+}
+
+.cpsc449 {
+    background-color: #afddb9;
+}
+
+.cpsc481 {
+    background-color: #ffd29f;
+}
+
+.astr209 {
+    background-color: #fcb2b2;
+}
+
+.geog280 {
+    background-color: #7cebf7;
+}
+
+.cpsc399 {
+    background-color: #c688d6;
+}
+
+.bc5 {
+    background-color: #ffdfba;
+    visibility: visible;
+}

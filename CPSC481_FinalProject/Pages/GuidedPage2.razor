@@ -1,0 +1,221 @@
+﻿@page "/guided2"
+
+@inject ICourseState CourseState 
+@inject ITermState termState
+@inject IToastService toastService
+@implements IDisposable
+
+<!-- Container below the header bar -->
+<div class="h-flex">
+    <!-- Step Buttons -->
+    <div class="d-flex justify-content-center" style="padding-top: 10px; padding-bottom: 10px; background-color: rgba(128, 128, 128, 0.2);">
+        <div class="container">
+            <div class="d-flex justify-content-center">
+                <ul class="list-unstyled d-flex mb-0">
+                    <li class="step">
+                        <div class="d-flex flex-column align-items-center">
+                            <NavLink href="guided">
+                                <button type="button" class="btn btn-outline-primary btn-circle btn-xl">1</button>
+                            </NavLink>
+                            <span class="mt-2">Select Courses</span>
+                        </div>
+                    </li>
+                    <li class="step mx-5 d-flex align-items-center">
+                        <div class="line bg-primary"></div>
+                        <div class="d-flex flex-column align-items-center">
+                            <button type="button" class="btn btn-primary btn-circle btn-xl"> 2 </button>
+                            <span class="mt-2">Select Schedule</span>
+                        </div>
+                    </li>
+                    <li class="step d-flex align-items-center">
+                        <div class="line bg-secondary"></div>
+                        <div class="d-flex flex-column align-items-center">
+                            @if (ShouldShowTimeConflict())
+                            {
+                            <button type="button" class="btn btn-secondary btn-circle btn-xl" data-bs-toggle="modal"
+                                    data-bs-target="#TimeConflictModal">
+                                3
+                            </button>
+                            }
+                            else
+                            {
+                                @if (termState.getTermState() == "Winter 2023")
+                                {
+                                    <NavLink href="guided3">
+                                        <button type="button" class="btn btn-secondary btn-circle btn-xl"> 3 </button>
+                                    </NavLink>
+                                }
+                                else if (termState.getTermState() == "Fall 2023")
+                                {
+                                    <button type="button" class="btn btn-secondary btn-circle btn-xl" data-bs-toggle="modal" data-bs-target="#notEnrollmentDate"> 3 </button>
+                                    <div class="modal fade" id="notEnrollmentDate" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="noChangeLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="noChangeLabel">
+                                                        Error
+                                                    </h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="flex-container">
+                                                        <label>
+                                                            You cannot enroll for courses Fall 2023 because it is before your enrollment date. Your enrollment date for Fall 2023 is May 7th 10:30AM.
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Okay</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            <span class="mt-2">Get Schedule</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Select Schedule -->
+    <div class="container" style="width: fit-content">
+        <div class="row" style="width: fit-content">
+            <div class="col-12">
+                <div class="centered-container">
+                    <div class="rounded-box">
+                        <div class="content-container">
+                            <div class="d-flex">
+                                <div class="search-sidebar-wrapper">
+                                    <div class="search-wrapper">
+                                        <GuidedSearchSidebar2 />
+                                    </div>
+                                </div>
+                                <div class= "schedule-wrapper">
+                                    <GuidedScheduleMain2 />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Time Conflict Modal -->
+    <div class="modal fade" id="TimeConflictModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal" tabindex="-1" role="dialog"></div>
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title " id="exampleModalLabel">Schedule contains a time conflict.</h5>
+                    <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+                <div class="modal-body">
+                    <div class="flex-container">
+                        <label>
+                            Time Conflicts:
+                        </label><br />
+                        <label>
+                            - CPSC 481 and CPSC 399
+                        </label><br /><br />
+                        <label>
+                            <em> To resolve a time conflict, try different course timings or remove a conflicting course. </em>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                    <NavLink href="guided3">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Continue Anyways</button>
+                    </NavLink>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .btn-circle.btn-xl {
+	    width: 50px;
+	    height: 50px;
+	    padding: 13px 18px;
+	    border-radius: 60px;
+	    font-size: 15px;
+	    text-align: center;
+    }
+
+    .line {
+        height: 4px;
+        width: 100px;
+        margin-right: -10px;
+        margin-left: -60px;
+        margin-top: -30px;
+        z-index: -1;
+        position: relative;
+    }
+
+    .rounded-box {
+        margin-top: 10px;
+        border: 1px solid #000;
+        border-radius: 10px;
+        background-color: white;
+        padding: 0;
+        display: inline-flex;
+        height: 75vh;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 1);
+        /*height: 500px; /* Fixed height */ */ 
+        overflow: hidden;
+    }
+
+    .content-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border-radius: 10px;
+        height: 75vh;
+        overflow: hidden;
+    }
+
+    .search-sidebar-wrapper {
+        max-height: 74.5vh;
+        /*background-color: black;*/
+    }
+
+    .schedule-wrapper{
+        flex: 1; 
+        border-left: 1px solid black;
+        max-height: 74.5vh;
+    }
+
+</style>
+@code {
+    private bool ShouldShowTimeConflict()
+    {
+        return false;
+    }
+
+    protected override void OnInitialized()
+    {
+        CourseState.OnCourseStateChanged += OnCourseStateChanged;
+    }
+
+    private void OnCourseStateChanged()
+    {
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        CourseState.OnCourseStateChanged -= OnCourseStateChanged;
+    }
+
+    private void NotifyEnrollmentDateError()
+    {
+        toastService.ShowError("To get schedule in the term Fall 2023 wait until your enrollment date of May 7th 10:30");
+    }
+}

@@ -1,0 +1,654 @@
+﻿@using Blazored.Typeahead
+@using CPSC481_FinalProject.Shared
+@*@inject SelectedCourses SelectedCourses*@
+@inject ICourseState CourseState
+@inject IAdvancedSearchState AdvancedSearchState
+@inject IToastService toastService
+@implements IDisposable
+﻿
+@*Import Button Icons*@
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+<div class="d-flex">
+    <div class="wrapper-SearchSidebar" style="max-width: 350px; min-width: 350px">
+        <div class="container" id="wrapper-searchbar">
+            @*===== COURSE SEARCH BAR SECTION =====*@
+            <BlazoredTypeahead SearchMethod="SearchCourses" @bind-Values="CourseState.selectedCourses"
+                               placeholder="Search by course number, title or professor" style="font-size: small; background: white; z-index: 10;">
+                <SelectedTemplate>
+                    <div style="font-size: small; background: white;">
+                        @context.Number
+                    </div>
+                </SelectedTemplate>
+                <ResultTemplate>
+                    <div style="font-size: small;">
+                        @context.Number
+                        (@context.Title)
+                    </div>
+                </ResultTemplate>
+                <NotFoundTemplate>
+                    <div style="font-size: small;">
+                        No Results
+                    </div>
+                </NotFoundTemplate>
+            </BlazoredTypeahead>
+            @if (!string.IsNullOrEmpty(advancedSearchParamaters.getSubjectInput()) || !string.IsNullOrEmpty(advancedSearchParamaters.getExcludeSubjectInput()) || advancedSearchParamaters.getCourseNumInput().HasValue)
+            {
+                <div class="d-flex flex-container" style="align-items: center;">
+                    <span class="material-symbols-outlined" style="color: #198754">
+                        check_circle
+                    </span>
+                    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+                    <div class="advanced-search-enabled-text">
+                        Advanced search criteria applied
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div style="margin-bottom: 8px">
+                </div>
+            }
+
+
+            @*===== ADVANCED SEARCH SECTION =====*@
+            <div class="d-flex flex-column" id="sidebarHeader">
+                <button @onclick="() => UpdateAdvancedSearchArrow()" id="collapseButton" class="btn btn-primary float-start" data-bs-toggle="collapse" data-bs-target="#hiddenSearch"
+                        aria-expanded="false" aria-controls="hiddenSearch">
+                    @advancedSearchArrow
+                </button>
+            </div>
+
+            @*===== BOOKMARKED COURSES =====*@
+            <div class="d-flex align-items-center">
+                <div class="dropdown">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown"
+                            data-bs-auto-close="outside" aria-expanded="false" style="font-size: 14px">
+                        Bookmarked Course(s)
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+
+                        @if (CourseState.bookmarkedCourses != null)
+                        {
+                            @foreach (var courseItem in CourseState.bookmarkedCourses)
+                            {
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <a class="dropdown-item" @onclick="() => CourseState.AddCourse(courseItem)"> @courseItem.Number </a>
+
+                                    @* THINKING ABOUT JUST REMOVING THIS. TOO COMPLICATED TO IMPLEMENT ATM *@
+                                    @if (courseItem.IsBookmarked == true)
+                                    {
+                                        <button type="button" class="btn btn-img" @onclick="() => RemoveBookmark(courseItem)"
+                                                style="position: absolute; top: 10%; right: 12%; z-index: 100; object-fit: cover; max-width: 12%; max-height: 12%;">
+                                            <!--<span class="material-symbols-outlined" id="filled">
+                                                bookmark
+                                            </span>-->
+                                            <span class="material-symbols-outlined" id="filled" style="color: rgb(180, 23, 23);">
+                                                close
+                                            </span>
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <button type="button" class="btn btn-img" @onclick="() => AddBookmark(courseItem)"
+                                                style="position: absolute; top: 10%; right: 12%; z-index: 100; object-fit: cover; max-width: 12%; max-height: 12%;">
+                                            <span class="material-symbols-outlined">
+                                                bookmark_add
+                                            </span>
+                                        </button>
+                                    }
+                                </li>
+                            }
+                        }
+                    </ul>
+                </div>
+
+                <button type="button" class="btn btn-danger btn-sm m-1 p-2" data-bs-toggle="modal" data-bs-target="#clearCourseModal">
+                    Clear Courses
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="clearCourseModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal" tabindex="-1" role="dialog"></div>
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title " id="exampleModalLabel">Warning</h5>
+                                <button type="button " class="btn-close " data-bs-dismiss="modal" aria-label="Close" ></button>
+                            </div>
+
+                            <div class="modal-body">
+                                <div class="flex-container">
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            <div style = "font-size: 16px;">
+                                                Clear all unenrolled/unwaitlisted courses?
+                                            </div>
+                                        </label>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" @onclick="ClearCourses">Continue</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @*===== COURSE LIST =====*@
+        <div class="container" id="wrapper-hiddenBar-courses">
+            <div class="d-grid gap-3 mx-2 my-2" id="no-side-padding">
+                @if (CourseState.selectedCourses != null)
+                {
+                    @foreach (var courseItem in CourseState.selectedCourses)
+                    {
+                        <GuidedCourseAccordian1 SetCourse="courseItem"
+                                 AddBookmarkEvent="AddBookmark" RemoveBookmarkEvent="RemoveBookmark" />
+                    }
+                }
+            </div>
+        </div>
+    </div>
+
+    <!-- HIDDEN ADVANCED SEARCH-->
+    <!-- Hidden contents of the sidebar -->
+        <div class="collapse collapse-horizontal" id="hiddenSearch"> <!--Seperation between Course Search and Advanaced Search  -->
+            <div class="card" style="width: 300px;">
+                <div class="card-header text-center bg-light">
+                    <h4 style = "padding-bottom: 0; margin-bottom: 0;"><strong>Advanced Search</strong></h4>
+                </div>
+
+                <ul class="list-group list-group-flush">
+                    <EditForm Model="@advancedSearchModal" OnSubmit="@HandleAdvancedSearchSubmit">
+                        <li class="list-group-item">
+                            <strong>Subject:</strong><br>
+                            <div class="d-flex flex-container" id="wrapper-advancedDropdown">
+                                <InputSelect class="form-control" @bind-Value="toUpdateSubjectInput">
+                                    <option value="">...</option>
+                                    <option value="ASPH">ASPH - Astrophysics</option>
+                                    <option value="ASTR">ASTR - Astronomy</option>
+                                    <option value="CPSC">CPSC - Computer Science</option>
+                                    <option value="GEOG">GEOG - Geology</option>
+                                    <option value="SENG">SENG - Software Engineering</option>
+                                </InputSelect>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Course Number:</strong><br>
+                            <div class="d-flex flex-container" id="wrapper-advancedDropdown">
+                                <InputSelect class="form-control" @bind-Value="toUpdateCourseNumSymbolInput" style="width: 75%;">
+                                    <option value="eq">equal to</option>
+                                    <option value="lt">less than</option>
+                                    <option value="gt">greater than</option>
+                                </InputSelect>
+                                <InputNumber class="form-control" @bind-Value="toUpdateCourseNumInput" placeholder="..." />
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Results to Include:</strong><br>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
+                                <label class="form-check-label" for="flexCheckChecked">
+                                    Include results based on title
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
+                                <label class="form-check-label" for="flexCheckChecked">
+                                    Include results based on description
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
+                                <label class="form-check-label" for="flexCheckChecked">
+                                    Include results based on professor name
+                                </label>
+                            </div>
+                        </li>
+
+                        <li class="list-group-item">
+                            <strong>Dates Permitted:</strong><br>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault"  style="font-size: 12px;">
+                                    Mon
+                                </label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault"  style="font-size: 12px;">
+                                    Tue
+                                </label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault"  style="font-size: 12px;">
+                                    Wed
+                                </label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault" style="font-size: 12px;">
+                                    Thu
+                                </label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault" style="font-size: 12px;">
+                                    Fri
+                                </label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault" style="font-size: 12px;">
+                                    Sat
+                                </label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault" style="font-size: 12px;">
+                                    Sun
+                                </label>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Time Range:</strong>
+                            <div class="d-flex flex-container" id="wrapper-advancedDropdown">
+                                <div class="d-flex align-items-center form-row">
+                                    <InputText id="name" class="form-control" @bind-Value="doNothing1" placeholder="0:00" />
+                                    <InputSelect class="form-control" @bind-Value="doNothing2" style="width: 75%;">
+                                        <option value="a">AM</option>
+                                        <option value="b">PM</option>
+                                    </InputSelect>
+                                    <label class="form-check-label" for="flexCheckDefault" style="vertical-align: middle;">
+                                        to
+                                    </label>
+                                    <InputText id="name" class="form-control" @bind-Value="doNothing3" placeholder="0:00" />
+                                    <InputSelect class="form-control" @bind-Value="doNothing4" style="width: 75%;">
+                                        <option value="a">AM</option>
+                                        <option value="b">PM</option>
+                                    </InputSelect>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="list-group-item">
+                            <strong>Seats:</strong><br>
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" value="" id="flexCheckChecked" checked>
+                                <label class="form-check-label" for="flexCheckChecked">
+                                    Show open classes only
+                                </label>
+                            </div>
+                        </li>
+
+                        <li class="list-group-item">
+                            <strong>Prerequisites:</strong><br>
+                            <div class="d-flex flex-container" id="wrapper-advancedDropdown">
+                                <InputSelect class="form-control" @bind-Value="doNothing5">
+                                    <option value="a">...</option>
+                                    <option value="b">Prerequisites Fulfilled</option>
+                                    <option value="c">No Prerequisites</option>
+                                </InputSelect>
+                            </div>
+                        </li>
+
+                        <!--<li class="list-group-item">
+                            <strong>Location:</strong><br>
+                            <div class="d-flex flex-container" id="wrapper-advancedDropdown">
+                                <InputSelect class="form-control" @bind-Value="doNothing">
+                                    <option value="a">...</option>
+                                    <option value="b">University of Calgary</option>
+                                    <option value="c">Web-Based</option>
+                                </InputSelect>
+                            </div>
+                        </li>-->
+                        <li class="list-group-item">
+                            <div class="d-flex flex-container" style="justify-content: center;">
+                                <button type="submit" class="btn btn-primary mx-1">Save Changes</button>
+                                <button type="reset" class="btn btn-secondary mx-1" @onclick="() => ResetAdvancedSearch()">Reset</button>
+                            </div>
+                        </li>
+                    </EditForm>
+                </ul>
+            </div>
+        </div>
+</div>
+
+<style>
+    .bg-lightgreen {
+        background-color: #c8e6c9;
+        padding-bottom: 1px; /* add a small amount of padding to create space for the line */
+        border: 1px solid black; /* add a border to create the line */
+    }
+
+    #wrapper-searchbar {
+        border-bottom: 1.5px solid black;
+        padding-bottom: 5px;
+    }
+
+    #wrapper-advanced {
+        background-color: white;
+        color: black;
+        z-index: 3;
+        <!-- other positioning attributes-->
+    }
+
+    #wrapper-advancedDropdown {
+        justify-content: space-between;
+    }
+
+    .wrapper-SearchSidebar {
+        background-color: #e9ecef;
+        font-size: 1.5rem;
+        flex-direction: column;
+        height: 60vh;
+        padding: 5px;
+        padding-left: 0;
+        padding-right: 0;
+        min-width: 30%;
+    }
+
+    #wrapper-hiddenBar-courses {
+        margin-bottom: 0;
+        /*min-height: 70vh;*/
+        max-height: 50vh;
+        overflow-y: scroll;
+        padding-top: 0px;
+        padding-bottom: 0px;
+        padding: 0px;
+    }
+
+    #no-side-padding {
+        padding: 0px;
+    }
+
+    #filled {
+        font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 48
+    }
+
+    #seats-waitlist li.list-group-item p {
+        margin-bottom: 0;
+    }
+
+    #no-space-after-paragraph {
+        margin-bottom: 0;
+    }
+
+    #section-selected {
+        color: darkblue;
+        text-decoration: underline;
+    }
+
+    #section-unselected {
+        color: #424242
+    }
+
+    #section-times {
+        font-size: 9px;
+        color: rgb(108, 117, 125)
+    }
+
+    .blazored-typeahead__input-mask-wrapper {
+        background: white !important;
+    }
+
+    .blazored-typeahead__multi-value {
+        display: none !important;
+    }
+
+    #hiddenSearch {
+        height: 75vh;
+        overflow: auto;
+        padding-bottom: 15px;
+        background-color: white;
+        border-left: 5px solid #ccc;
+    }
+
+    .advanced-search-enabled-text {
+        color: rgb(108, 117, 125);
+        font-size: 0.85rem;
+        text-decoration: none;
+        white-space: nowrap;
+    }
+
+</style>
+
+@code {
+
+    private advancedSearchModal advancedSearchModal = new();
+    private List<CourseData> courses;
+    private List<CourseData> bookmarkedCourses = new();
+
+    private string advancedSearchArrow;
+
+    private string toUpdateSubjectInput;
+    private string toUpdateSubjectInput2;
+    private string toUpdateExcludeSubjectInput;
+    private string toUpdateExcludeSubjectInput2;
+    private string toUpdateCourseNumSymbolInput;
+    private int? toUpdateCourseNumInput;
+
+    private string doNothing1;
+    private string doNothing2;
+    private string doNothing3;
+    private string doNothing4;
+    private string doNothing5;
+
+    private string recievedSubjectInput;
+
+    private string recievedCourseNumSymbolInput;
+
+    private int? recievedCourseNumInput;
+
+    public bool isResetClicked = false;
+
+    protected override void OnInitialized()
+    {
+        courses = CourseList.GetList();
+        CourseState.OnCourseStateChanged += StateHasChanged;
+        AdvancedSearchState.OnAdvancedSearchStateChanged += StateHasChanged;
+
+        advancedSearchArrow = "Advanced Search >>";
+    }
+
+    // Ensure that there are no memory leaks
+    public void Dispose()
+    {
+        CourseState.OnCourseStateChanged -= StateHasChanged;
+        AdvancedSearchState.OnAdvancedSearchStateChanged -= StateHasChanged;
+    }
+
+    private void UpdateAdvancedSearchArrow()
+    {
+        if (advancedSearchArrow == "Advanced Search >>")
+        {
+            advancedSearchArrow = "Advanced Search <<";
+        }
+        else if (advancedSearchArrow == "Advanced Search <<")
+        {
+            advancedSearchArrow = "Advanced Search >>";
+        }
+    }
+
+    private async Task<IEnumerable<CourseData>> SearchCourses(string searchText)
+    {
+        //Have subject to include filter and a course number
+        if (!string.IsNullOrEmpty(advancedSearchParamaters.getSubjectInput()) && advancedSearchParamaters.getCourseNumInput().HasValue)
+        {
+            if (advancedSearchParamaters.getCourseNumSymbolInput() == "eq" || string.IsNullOrEmpty(advancedSearchParamaters.getCourseNumSymbolInput()))
+            {
+                return await Task.FromResult(courses.Where(x => (x.Number.ToLower().Contains(advancedSearchParamaters.getSubjectInput().ToLower()) ||
+                                                                x.Number.ToLower().Contains(advancedSearchParamaters.getSubjectInput2().ToLower())) &&
+                                                                x.PureNumber == advancedSearchParamaters.getCourseNumInput() &&
+                                                                (x.Number.ToLower().Contains(searchText.ToLower()) ||
+                                                                x.Title.ToLower().Contains(searchText.ToLower()) ||
+                                                                x.Professor.ToLower().Contains(searchText.ToLower())))
+                                                                .ToList());
+            }
+            else if (advancedSearchParamaters.getCourseNumSymbolInput() == "lt")
+            {
+                return await Task.FromResult(courses.Where(x => (x.Number.ToLower().Contains(advancedSearchParamaters.getSubjectInput().ToLower()) ||
+                                                                x.Number.ToLower().Contains(advancedSearchParamaters.getSubjectInput2().ToLower())) &&
+                                                                x.PureNumber < advancedSearchParamaters.getCourseNumInput() &&
+                                                                (x.Number.ToLower().Contains(searchText.ToLower()) ||
+                                                                x.Title.ToLower().Contains(searchText.ToLower()) ||
+                                                                x.Professor.ToLower().Contains(searchText.ToLower())))
+                                                                .ToList());
+
+            }
+            else if (advancedSearchParamaters.getCourseNumSymbolInput() == "gt")
+            {
+                return await Task.FromResult(courses.Where(x => (x.Number.ToLower().Contains(advancedSearchParamaters.getSubjectInput().ToLower()) ||
+                                                                x.Number.ToLower().Contains(advancedSearchParamaters.getSubjectInput2().ToLower())) &&
+                                                                x.PureNumber > advancedSearchParamaters.getCourseNumInput() &&
+                                                                (x.Number.ToLower().Contains(searchText.ToLower()) ||
+                                                                x.Title.ToLower().Contains(searchText.ToLower()) ||
+                                                                x.Professor.ToLower().Contains(searchText.ToLower())))
+                                                                .ToList());
+            }
+        }
+        //Have subject to exclude to filter and a course number
+        if (!string.IsNullOrEmpty(advancedSearchParamaters.getExcludeSubjectInput()) && advancedSearchParamaters.getCourseNumInput().HasValue)
+        {
+            if (advancedSearchParamaters.getCourseNumSymbolInput() == "eq" || string.IsNullOrEmpty(advancedSearchParamaters.getCourseNumSymbolInput()))
+            {
+                return await Task.FromResult(courses.Where(x => (!x.Number.ToLower().Contains(advancedSearchParamaters.getExcludeSubjectInput().ToLower()) &&
+                                                                !x.Number.ToLower().Contains(advancedSearchParamaters.getExcludeSubjectInput2().ToLower())) &&
+                                                                x.PureNumber == advancedSearchParamaters.getCourseNumInput() &&
+                                                                (x.Number.ToLower().Contains(searchText.ToLower()) ||
+                                                                x.Title.ToLower().Contains(searchText.ToLower()) ||
+                                                                x.Professor.ToLower().Contains(searchText.ToLower())))
+                                                                .ToList());
+            }
+            else if (advancedSearchParamaters.getCourseNumSymbolInput() == "lt")
+            {
+                return await Task.FromResult(courses.Where(x => (!x.Number.ToLower().Contains(advancedSearchParamaters.getExcludeSubjectInput().ToLower()) &&
+                                                                !x.Number.ToLower().Contains(advancedSearchParamaters.getExcludeSubjectInput2().ToLower())) &&
+                                                                x.PureNumber < advancedSearchParamaters.getCourseNumInput() &&
+                                                                (x.Number.ToLower().Contains(searchText.ToLower()) ||
+                                                                x.Title.ToLower().Contains(searchText.ToLower()) ||
+                                                                x.Professor.ToLower().Contains(searchText.ToLower())))
+                                                                .ToList());
+
+            }
+            else if (advancedSearchParamaters.getCourseNumSymbolInput() == "gt")
+            {
+                return await Task.FromResult(courses.Where(x => (!x.Number.ToLower().Contains(advancedSearchParamaters.getExcludeSubjectInput().ToLower()) &&
+                                                                !x.Number.ToLower().Contains(advancedSearchParamaters.getExcludeSubjectInput2().ToLower())) &&
+                                                                x.PureNumber > advancedSearchParamaters.getCourseNumInput() &&
+                                                                (x.Number.ToLower().Contains(searchText.ToLower()) ||
+                                                                x.Title.ToLower().Contains(searchText.ToLower()) ||
+                                                                x.Professor.ToLower().Contains(searchText.ToLower())))
+                                                                .ToList());
+            }
+        }
+        //Only have subject to include filter
+        else if (!string.IsNullOrEmpty(advancedSearchParamaters.getSubjectInput()))
+        {
+            return await Task.FromResult(courses.Where(x => (x.Number.ToLower().Contains(advancedSearchParamaters.getSubjectInput().ToLower()) ||
+                                                            x.Number.ToLower().Contains(advancedSearchParamaters.getSubjectInput2().ToLower())) &&
+                                                            (x.Number.ToLower().Contains(searchText.ToLower()) ||
+                                                            x.Title.ToLower().Contains(searchText.ToLower()) ||
+                                                            x.Professor.ToLower().Contains(searchText.ToLower())))
+                                                            .ToList());
+        }
+        //Only have subject to exclude filter
+        else if (!string.IsNullOrEmpty(advancedSearchParamaters.getExcludeSubjectInput()))
+        {
+            return await Task.FromResult(courses.Where(x => (!x.Number.ToLower().Contains(advancedSearchParamaters.getExcludeSubjectInput().ToLower()) &&
+                                                            !x.Number.ToLower().Contains(advancedSearchParamaters.getExcludeSubjectInput2().ToLower())) &&
+                                                            (x.Number.ToLower().Contains(searchText.ToLower()) ||
+                                                            x.Title.ToLower().Contains(searchText.ToLower()) ||
+                                                            x.Professor.ToLower().Contains(searchText.ToLower())))
+                                                            .ToList());
+        }
+        //Only have a number filter
+        else if (advancedSearchParamaters.getCourseNumInput().HasValue)
+        {
+            //Console.WriteLine("In course number search");
+            if (advancedSearchParamaters.getCourseNumSymbolInput() == "eq" || string.IsNullOrEmpty(advancedSearchParamaters.getCourseNumSymbolInput()))
+            {
+                return await Task.FromResult(courses.Where(x => x.PureNumber == advancedSearchParamaters.getCourseNumInput() &&
+                                                                (x.Number.ToLower().Contains(searchText.ToLower()) ||
+                                                                x.Title.ToLower().Contains(searchText.ToLower()) ||
+                                                                x.Professor.ToLower().Contains(searchText.ToLower())))
+                                                                .ToList());
+            }
+            else if (advancedSearchParamaters.getCourseNumSymbolInput() == "lt")
+            {
+                return await Task.FromResult(courses.Where(x => x.PureNumber < advancedSearchParamaters.getCourseNumInput() &&
+                                                                (x.Number.ToLower().Contains(searchText.ToLower()) ||
+                                                                x.Title.ToLower().Contains(searchText.ToLower()) ||
+                                                                x.Professor.ToLower().Contains(searchText.ToLower())))
+                                                                .ToList());
+
+            }
+            else if (advancedSearchParamaters.getCourseNumSymbolInput() == "gt")
+            {
+                return await Task.FromResult(courses.Where(x => x.PureNumber > advancedSearchParamaters.getCourseNumInput() &&
+                                                                (x.Number.ToLower().Contains(searchText.ToLower()) ||
+                                                                x.Title.ToLower().Contains(searchText.ToLower()) ||
+                                                                x.Professor.ToLower().Contains(searchText.ToLower())))
+                                                                .ToList());
+            }
+        }
+        //No advanced search filters
+        return await Task.FromResult(courses.Where(x => x.Number.ToLower().Contains(searchText.ToLower()) ||
+                                                        x.Title.ToLower().Contains(searchText.ToLower()) ||
+                                                        x.Professor.ToLower().Contains(searchText.ToLower())).ToList());
+    }
+
+    public void AddBookmark(CourseData course)
+    {
+        if (!CourseState.bookmarkedCourses.Contains(course))
+        {
+            CourseState.AddBookmark(course);
+            toastService.ShowSuccess("Bookmarked " + course.Number);
+        }
+    }
+
+    public void RemoveBookmark(CourseData course)
+    {
+        CourseState.RemoveBookmark(course);
+        toastService.ShowInfo("Unbookmarked " + course.Number);
+    }
+
+    private void HandleAdvancedSearchSubmit()
+    {
+        //TODO ACCOUNT FOR RESETING THE NEWLY ADDED THINGS LIKE TOUPDATESUBJECTINPUT2
+        advancedSearchParamaters.setSubjectInput(toUpdateSubjectInput);
+        advancedSearchParamaters.setSubjectInput2("HELLOTHERETHISISNOTAVALIDSEARCHTERMWHICHISWHYITISSOLONG");
+        advancedSearchParamaters.setExcludeSubjectInput("");
+        advancedSearchParamaters.setExcludeSubjectInput2("HELLOTHERETHISISNOTAVALIDSEARCHTERMWHICHISWHYITISSOLONG");
+        advancedSearchParamaters.setCourseNumSymbolInput(toUpdateCourseNumSymbolInput);
+        advancedSearchParamaters.setCourseNumInput(toUpdateCourseNumInput);
+
+        //Console.WriteLine("SubjectInput: " + advancedSearchParamaters.getSubjectInput());
+        //Console.WriteLine("CourseNumSymbolInput: " + advancedSearchParamaters.getCourseNumSymbolInput());
+        //Console.WriteLine("CourseNumInput: " + advancedSearchParamaters.getCourseNumInput());
+        /*if (isResetClicked)
+            toastService.ShowInfo("Cleared Advanced Search filters");
+        else
+            toastService.ShowSuccess("Saved Advanced Search filters");*/
+    }
+
+    private void ResetAdvancedSearch()
+    {
+        //TODO ACCOUNT FOR RESETING THE NEWLY ADDED THINGS LIKE TOUPDATESUBJECTINPUT2
+        toUpdateSubjectInput = "";
+        toUpdateCourseNumSymbolInput = "eq";
+        toUpdateCourseNumInput = null;
+
+        isResetClicked = true;
+        HandleAdvancedSearchSubmit();
+        isResetClicked = false;
+    }
+
+    private void ClearCourses()
+    {
+        CourseState.ClearNeccesaryCourses();
+    }
+}
+
