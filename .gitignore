@@ -1,4 +1,4 @@
-*.js binary
+.vs
 
 .vscode/*
 !.vscode/settings.json
