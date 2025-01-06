@@ -67,16 +67,7 @@
                             </span>
                         </button>
                     }
-                    <!--
 
-                    @* Display visibility icon *@
-                    <button type="button" class="btn btn-img" @onclick="() => CourseState.HideCourse(SetCourse.Number)"
-                            style="position: absolute; top: 10%; right: 27%; z-index: 5; object-fit: cover; max-width: 12%; max-height: 12%;">
-                        <span class="material-symbols-outlined">
-                            visibility
-                        </span>
-                    </button>
-                    -->
                 }
                 else
                 {
@@ -110,19 +101,9 @@
                         </button>
                     }
 
-                    <!--
-                    @* Display visibility icon *@
-                    <button type="button" class="btn btn-img" @onclick="() => CourseState.HideCourse(SetCourse.Number)"
-                            style="position: absolute; top: 10%; right: 20%; z-index: 5; object-fit: cover; max-width: 12%; max-height: 12%;">
-                        <span class="material-symbols-outlined">
-                            visibility
-                        </span>
-                    </button>
-                    -->
                 }
             </h2>
             <div id="@("collapseOne"+SetCourse.ID)" class="accordion-collapse collapse" aria-labelledby="@("headingOne"+SetCourse.ID)">
-                @*TODO*@
                 <div class="accordion-body">
                     @*HTML FOR COURSE DESCRIPTION DROPDOWN*@
                     <div class="course-description" style="font-size: 16px;">
@@ -272,35 +253,6 @@
                 </div>
             </div>
         </div>
-        <!--
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="@("headingTwo"+SetCourse.ID)">
-                <button class="accordion-button collapsed"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="@("#collapseTwo"+SetCourse.ID)"
-                        aria-expanded="true"
-                        aria-controls="@("collapseTwo"+SetCourse.ID)">
-                    Lecture/Tutorial Times
-                </button>
-            </h2>
-            <div id="@("collapseTwo"+SetCourse.ID)" class="accordion-collapse collapse" aria-labelledby="@("headingTwo"+SetCourse.ID)">
-                @*TODO (KEEP TRACK OF ARIA LABELLED BY)*@
-                <div class="accordion-body">
-                    @*HTML FOR LECTURE/TUTORIAL TIMES DROPDOWN*@
-                    <div class="times-description" style="font-size: 12px">
-                        @* Display course and lecturn times *@
-                        <CourseTimes ID="SetCourse.ID"></CourseTimes>
-
-                        @* Display buttons *@
-                        <li class="list-group-item d-flex justify-content-between align-items-center" style="border: none">
-                            <button type="button" class="btn btn-secondary">Select All</button>
-                            <button type="button" class="btn btn-secondary">Select None</button>
-                        </li>
-                    </div>
-                </div>
-            </div>
-        </div>-->
     </div>
 }
 else
@@ -336,14 +288,6 @@ else
                 @* Display Trash/cancel Icon *@
                 @if (SetCourse.Status == 2 || SetCourse.Status == 3) @* Display all 3 icons *@
                 {
-                    <!--
-                    <button type="button" class="btn btn-img" @onclick="() => CourseState.ShowCourse(SetCourse.Number)"
-                            style="position: absolute; top: 20%; right: 31%; z-index: 5; object-fit: cover; padding: 0; padding-right: 5px;"
-                            title="Show course">
-                        <span class="material-symbols-outlined">
-                            visibility_off
-                        </span>
-                    </button>-->
 
                     @* Display bookmark icon *@
                     @if (SetCourse.IsBookmarked == false)
@@ -385,15 +329,6 @@ else
                         </span>
                     </button>
 
-                    <!--
-                    <button type="button" class="btn btn-img" @onclick="() => CourseState.ShowCourse(SetCourse.Number)"
-                            style="position: absolute; top: 20%; right: 22%; z-index: 5; object-fit: cover; padding: 0; padding-right: 5px;"
-                            title="Show course">
-                        <span class="material-symbols-outlined">
-                            visibility_off
-                        </span>
-                    </button> -->
-
                     @if (SetCourse.IsBookmarked == false)
                     {
                         <button type="button" class="btn btn-img" @onclick="@(() => AddBookmarkEvent.InvokeAsync(SetCourse))"
@@ -418,14 +353,6 @@ else
 
                 else if (SetCourse.Status == 4)
                 {
-                    <!--
-                    <button type="button" class="btn btn-img" @onclick="() => CourseState.ShowCourse(SetCourse.Number)"
-                            style="position: absolute; top: 20%; right: 31%; z-index: 5; object-fit: cover; padding: 0; padding-right: 5px;"
-                            title="Show course">
-                        <span class="material-symbols-outlined">
-                            visibility_off
-                        </span>
-                    </button>-->
 
                     @if (SetCourse.IsBookmarked == false)
                     {
@@ -460,7 +387,6 @@ else
 
             </h2>
             <div id="@("collapseOne"+SetCourse.ID)" class="accordion-collapse collapse" aria-labelledby="@("headingOne"+SetCourse.ID)">
-                @*TODO*@
                 <div class="accordion-body">
                     @*HTML FOR COURSE DESCRIPTION DROPDOWN*@
                     <div class="course-description" style="font-size: 16px;">
@@ -626,6 +552,5 @@ else
     private void OnRemoveCourse()
     {
         CourseState.RemoveCourse(SetCourse);
-        //toastService.ShowInfo("Removed " + SetCourse.Number);
     }
 }

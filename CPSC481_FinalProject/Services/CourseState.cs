@@ -166,9 +166,6 @@ namespace CPSC481_FinalProject.Services
                 }
             }
 
-            //selectedCourses.Clear();
-            //selectedCourses = _selectedCourses;
-
             OnCourseStateChanged?.Invoke();
         }
 

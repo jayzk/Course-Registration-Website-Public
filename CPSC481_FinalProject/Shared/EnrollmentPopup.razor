@@ -8,29 +8,9 @@
 
 <!-- Button trigger modal -->
 <div style="text-align: center;">
-
-    @* @if ((CourseState.selectedCourses.Contains(CourseList.GetCourse("CPSC 481")) && CourseState.Courses["CPSC 481"].Status == 4) || 
-    (CourseState.selectedCourses.Contains(CourseList.GetCourse("CPSC 481")) && CourseState.Courses["CPSC 481"].Status == 1) || 
-    (CourseState.selectedCourses.Contains(CourseList.GetCourse("CPSC 449")) && CourseState.Courses["CPSC 449"].Status == 4) || 
-    (CourseState.selectedCourses.Contains(CourseList.GetCourse("CPSC 449")) && CourseState.Courses["CPSC 449"].Status == 1) || 
-    (CourseState.selectedCourses.Contains(CourseList.GetCourse("CPSC 399")) && CourseState.Courses["CPSC 399"].Status == 4) || 
-    (CourseState.selectedCourses.Contains(CourseList.GetCourse("CPSC 399")) && CourseState.Courses["CPSC 399"].Status == 1) || 
-    (CourseState.selectedCourses.Contains(CourseList.GetCourse("GEOG 280")) && CourseState.Courses["GEOG 280"].Status == 4) || 
-    (CourseState.selectedCourses.Contains(CourseList.GetCourse("GEOG 280")) && CourseState.Courses["GEOG 280"].Status == 1) || 
-    (CourseState.selectedCourses.Contains(CourseList.GetCourse("ASTR 209")) && CourseState.Courses["ASTR 209"].Status == 4) || 
-    (CourseState.selectedCourses.Contains(CourseList.GetCourse("ASTR 209")) && CourseState.Courses["ASTR 209"].Status == 1) || 
-    (CourseState.selectedCourses.Contains(CourseList.GetCourse("ASPH 305")) && CourseState.Courses["ASPH 305"].Status == 4) ||
-    (CourseState.selectedCourses.Contains(CourseList.GetCourse("ASPH 305")) && CourseState.Courses["ASPH 305"].Status == 1) || 
-    (CourseState.selectedCourses.Contains(CourseList.GetCourse("SENG 300")) && CourseState.Courses["SENG 300"].Status == 4) ||
-    (CourseState.selectedCourses.Contains(CourseList.GetCourse("SENG 300")) && CourseState.Courses["SENG 300"].Status == 1)){
-        
-        <button type="button"  class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#noChange" @onclick="() => CourseState.ForceUpdate()">
-            Get this schedule
-        </button>         
-    }                         *@
     <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop" @onclick="() => CourseState.ForceUpdate()">
-            Get this schedule
-        </button>
+        Get this schedule
+    </button>
 
     
 

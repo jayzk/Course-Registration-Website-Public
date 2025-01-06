@@ -289,17 +289,6 @@
                             </InputSelect>
                         </div>
                     </li>
-
-                    <!--<li class="list-group-item">
-                        <strong>Location:</strong><br>
-                        <div class="d-flex flex-container" id="wrapper-advancedDropdown">
-                            <InputSelect class="form-control" @bind-Value="doNothing">
-                                <option value="a">...</option>
-                                <option value="b">University of Calgary</option>
-                                <option value="c">Web-Based</option>
-                            </InputSelect>
-                        </div>
-                    </li>-->
                     <li class="list-group-item">
                         <div class="d-flex flex-container" style = "justify-content: center;">
                             <button type="submit" class="btn btn-primary mx-1">Save Changes</button>
@@ -592,28 +581,16 @@
 
     private void HandleAdvancedSearchSubmit()
     {
-        //TODO ACCOUNT FOR RESETING THE NEWLY ADDED THINGS LIKE TOUPDATESUBJECTINPUT2
         advancedSearchParamaters.setSubjectInput(toUpdateSubjectInput);
         advancedSearchParamaters.setSubjectInput2("HELLOTHERETHISISNOTAVALIDSEARCHTERMWHICHISWHYITISSOLONG");
         advancedSearchParamaters.setExcludeSubjectInput("");
         advancedSearchParamaters.setExcludeSubjectInput2("HELLOTHERETHISISNOTAVALIDSEARCHTERMWHICHISWHYITISSOLONG");
         advancedSearchParamaters.setCourseNumSymbolInput(toUpdateCourseNumSymbolInput);
         advancedSearchParamaters.setCourseNumInput(toUpdateCourseNumInput);
-
-        //Console.WriteLine("SubjectInput: " + advancedSearchParamaters.getSubjectInput());
-        //Console.WriteLine("CourseNumSymbolInput: " + advancedSearchParamaters.getCourseNumSymbolInput());
-        //Console.WriteLine("CourseNumInput: " + advancedSearchParamaters.getCourseNumInput());
-        //Suggest remove below, user already knows they are upading advanced search if press these buttons and it is easy to revert
-        //Also already have feedback advanced search applied under search bar
-        /*if(isResetClicked)
-            toastService.ShowInfo("Cleared Advanced Search filters");
-            else
-            toastService.ShowSuccess("Saved Advanced Search filters");*/
     }
 
     private void ResetAdvancedSearch()
     {
-        //TODO ACCOUNT FOR RESETING THE NEWLY ADDED THINGS LIKE TOUPDATESUBJECTINPUT2
         toUpdateSubjectInput = "";
         toUpdateCourseNumSymbolInput = "eq";
         toUpdateCourseNumInput = null;

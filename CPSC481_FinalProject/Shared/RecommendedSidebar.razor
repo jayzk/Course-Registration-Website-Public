@@ -3,10 +3,6 @@
 @inject IToastService toastService
 
 <div class="card" style="width: 350px;">
-    <!--<div class="card-header text-center bg-light">
-        <strong>Tip: </strong> You can click on a unsatisfied course to add to your schedule or apply a custom search criteria
-    </div>-->
-
     <ul class="nav nav-pills" id="pills-tab" role="tablist" style="justify-content: center; background-color: #f8f9fa; padding-top: 15px;">
         <li class="nav-item" role="presentation">
             <button class="nav-link active" id="pills-required-tab" data-bs-toggle="pill" data-bs-target="#pills-required" type="button" role="tab" aria-controls="pills-required" aria-selected="true">Required</button>
@@ -270,7 +266,6 @@
     {
         courses = CourseList.GetList();
         CourseState.OnCourseStateChanged += StateHasChanged;
-        //AdvancedSearchState.OnAdvancedSearchStateChanged += StateHasChanged;
     }
 
     public void AdvancedSearchInFieldOfComputerScienceGreaterThan(int numInput)

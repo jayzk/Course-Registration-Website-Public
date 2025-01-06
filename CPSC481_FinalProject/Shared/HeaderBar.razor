@@ -8,7 +8,7 @@
     <!-- left side of header bar-->
    
     <div class="flex-display">
-        <NavLink href ="/">
+        <NavLink href="#" @onclick="RedirectToBase">
             <div class="navbar-brand flex-display">
 
                 <a>
@@ -95,45 +95,6 @@
                 </button>
             </NavLink>
         }
-        @*@if (currentPage.ToString() == "CPSC481_FinalProject.Pages.AdvancedPage" ||
-          currentPage.ToString() == "CPSC481_FinalProject.Pages.GuidedPage" ||
-          currentPage.ToString() == "CPSC481_FinalProject.Pages.GuidedPage2" ||
-          currentPage.ToString() == "CPSC481_FinalProject.Pages.GuidedPage3")
-        {
-            <button type="button" class="btn btn-warning mx-3" data-bs-toggle="modal" data-bs-target="#helpModal" >
-                Help
-        </button>
-        }
-
-        <!-- Modal -->
-        <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal" tabindex="-1" role="dialog"></div>
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title " id="exampleModalLabel">Help</h5>
-                        <button type="button " class="btn-close " data-bs-dismiss="modal" aria-label="Close" ></button>
-                    </div>
-
-                    <div class="modal-body">
-                        <div class="flex-container">
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    - Advanced Search allows you to specify certain search details
-                                </label>
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    - Bookmarked courses saves courses to view later, click a course to load it up. 
-                                </label>
-                        </div>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>*@
-
-
 
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-primary"  style = "margin-left:-4px" data-bs-toggle="modal" data-bs-target="#exampleModal">
@@ -234,10 +195,9 @@
         toastService.ShowSuccess("Updated Email Notification Preferences");
     }
 
-    /*public abstract Microsoft.AspNetCore.Http.IRequestCookieCollection Cookies { get; set; }
-
-    public void ReadCookie(){
-        Microsoft.AspNetCore.HttpResponse.cookies.Append("darkTheme", "yes");
-    }*/
+    private void RedirectToBase()
+    {
+        NavigationManager.NavigateTo(NavigationManager.BaseUri); // Redirects to the base URL
+    }
     
 }

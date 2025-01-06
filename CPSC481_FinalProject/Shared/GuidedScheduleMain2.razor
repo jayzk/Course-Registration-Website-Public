@@ -215,11 +215,6 @@ else
                         </li>
                     }
                 }
-                @*
-                <li><a class="dropdown-item">Schedule 1</a></li>
-                <li><a class="dropdown-item">Schedule 2</a></li>
-                <li><a class="dropdown-item">Schedule 3</a></li>
-                *@
             </ul>
         </div>
 
@@ -867,7 +862,7 @@ else
         if (CourseState.Courses["CPSC 449"].IsVisible == true && CourseState.selectedCourses.Contains(CourseList.GetCourse("CPSC 449")) && CourseState.Courses["CPSC 449"].checkedTime2 == true)
         {
             possibilityValue = 2;
-            //alternateCPSC449Lab = true;
+
             CourseState.Courses["CPSC 449"].alternateLab = true;
             CourseState.Courses["CPSC 449"].isFirstTime = false;
 
@@ -879,7 +874,7 @@ else
         if (CourseState.Courses["CPSC 449"].IsVisible == true && CourseState.selectedCourses.Contains(CourseList.GetCourse("CPSC 449")) && CourseState.Courses["CPSC 449"].checkedTime2 == true)
         {
             possibilityValue = 1;
-            //alternateCPSC449Lab = false;
+
             CourseState.Courses["CPSC 449"].alternateLab = false;
             CourseState.Courses["CPSC 449"].isFirstTime = true;
 

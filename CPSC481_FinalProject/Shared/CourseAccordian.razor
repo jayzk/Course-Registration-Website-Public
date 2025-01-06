@@ -121,7 +121,6 @@
                 }
             </h2>
             <div id="@("collapseOne"+SetCourse.ID)" class="accordion-collapse collapse" aria-labelledby="@("headingOne"+SetCourse.ID)">
-                @*TODO*@
                 <div class="accordion-body">
                     @*HTML FOR COURSE DESCRIPTION DROPDOWN*@
                     <div class="course-description" style="font-size: 16px;">
@@ -610,13 +609,11 @@ else
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        //await base.OnAfterRenderAsync(firstRender);
         await JS.InvokeVoidAsync("tooltipInit");
     }
 
     private void OnRemoveCourse()
     {
         CourseState.RemoveCourse(SetCourse);
-        //toastService.ShowInfo("Removed " + SetCourse.Number);
     }
 }
