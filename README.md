@@ -1,6 +1,10 @@
 # CoursEZ: Course Registration System
 Final project for CPSC 481 Human-Computer Interactions. Was developed by me and 4 other members
 
+[Live Demo](https://jayzk.github.io/Course-Registration-Website-Public/)
+
+Note: it's recommended to view the website at 80% zoom
+
 ## Description
 The CoursEZ registration system offers the user with two distinct modes of enrollment: "Guided mode" and "Advanced mode". "Advanced mode" provides access to all functionalities of the system and a wealth of information on one screen. However, for new users, this can prove to be overwhelming and complex. To alleviate this, the system provides "Guided mode" which breaks down the enrollment process into simple, step-by-step instructions.
 
