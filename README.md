@@ -57,6 +57,10 @@ The functionality of these functions and feature have only been partially implem
   - However, there are also some links that have not been implemented yet. Instead a popup will appear saying that it is still under development
 - Blocking certain times by clicking on the schedule 
   - This feature will only work on Thursday from 8:00am - 11:00am
+ 
+### Current limitations
+  - This project currently uses a static database as this was more focused towards frontend design and implementation
+  - Responsive design has not yet been implemented (only desktop is supported)
 
 ### Cases and scenarios implemented
 - If any time conflicts arise the schedule will disappear and display an alert error (Through two course times overlapping or a blocked time overlapping with courses)
